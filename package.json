@@ -1,7 +1,7 @@
 {
   "name": "get-shit-done-cc",
   "version": "1.6.4",
-  "description": "A meta-prompting, context engineering and spec-driven development system for Claude Code by TÂCHES.",
+  "description": "A meta-prompting, context engineering and spec-driven development system for Claude Code by TACHES.",
   "bin": {
     "get-shit-done-cc": "bin/install.js"
   },
@@ -12,6 +12,11 @@
     "agents",
     "hooks"
   ],
+  "scripts": {
+    "build:rlm": "tsc -p tsconfig.json",
+    "test:rlm": "node --test dist/rlm/**/*.test.js",
+    "postinstall:rlm": "node -e \"const fs=require('fs');const path=require('path');const dest='src/rlm/chunking/grammars';if(!fs.existsSync(dest))fs.mkdirSync(dest,{recursive:true});['tree-sitter-javascript','tree-sitter-typescript'].forEach(pkg=>{const src=path.join('node_modules',pkg);if(fs.existsSync(src)){const wasm=fs.readdirSync(src).filter(f=>f.endsWith('.wasm'));wasm.forEach(f=>fs.copyFileSync(path.join(src,f),path.join(dest,f)))}});\""
+  },
   "keywords": [
     "claude",
     "claude-code",
@@ -20,7 +25,7 @@
     "context-engineering",
     "spec-driven-development"
   ],
-  "author": "TÂCHES",
+  "author": "TACHES",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -28,5 +33,16 @@
   },
   "engines": {
     "node": ">=16.7.0"
+  },
+  "dependencies": {
+    "@qdrant/js-client-rest": "^1.16.2",
+    "ollama": "^0.6.0",
+    "tree-sitter-javascript": "^0.23.0",
+    "tree-sitter-typescript": "^0.23.0",
+    "web-tree-sitter": "^0.26.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
   }
 }
