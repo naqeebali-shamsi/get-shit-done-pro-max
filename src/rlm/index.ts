@@ -16,3 +16,17 @@ export * from './indexing/index.js';
 // Phase 2: RLM engine
 export * from './engine/index.js';
 export * from './evidence/index.js';
+
+// Phase 3: Verification Loop (VER-01, VER-02, VER-03)
+export {
+  Verifier,
+  ClaimExtractor,
+  checkEvidenceCoverage,
+  typecheckFiles,
+  runTests,
+  scanImpact,
+  type VerificationResult,
+  type AtomicClaim,
+  type CheckResult,
+  type CoverageResult,
+} from './verification/index.js';
