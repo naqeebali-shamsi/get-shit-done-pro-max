@@ -9,3 +9,4 @@
 
 export * from './types.js';
 export { ClaimExtractor } from './claims/extractor.js';
+export * from './checks/index.js';
