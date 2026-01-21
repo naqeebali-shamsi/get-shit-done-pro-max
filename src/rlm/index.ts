@@ -9,3 +9,5 @@ export * from './types.js';
 export * from './chunking/index.js';
 export * from './storage/index.js';
 export * from './embedding/index.js';
+export * from './retrieval/index.js';
+export * from './indexing/index.js';
