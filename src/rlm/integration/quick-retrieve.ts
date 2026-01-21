@@ -27,7 +27,7 @@ export interface QuickRetrieveOptions {
   onError?: OnErrorCallback;
 }
 
-const DEFAULT_OPTIONS: Required<QuickRetrieveOptions> = {
+const DEFAULT_OPTIONS: Required<Omit<QuickRetrieveOptions, 'onError'>> = {
   limit: 5,
   timeout: 500,
   scoreThreshold: 0.3,

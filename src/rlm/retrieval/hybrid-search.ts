@@ -120,7 +120,7 @@ async function performSearch(
   client: QdrantClient,
   collectionName: string,
   query: string,
-  opts: Required<SearchOptions>
+  opts: SearchOptions & typeof DEFAULT_OPTIONS
 ): Promise<HybridSearchResult> {
   // Generate dense embedding for query
   const denseVector = await embedText(query);
