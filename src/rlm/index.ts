@@ -41,3 +41,18 @@ export {
   type QuickRetrieveOptions,
   type ContextFormatOptions,
 } from './integration/index.js';
+
+// Phase 5: Optimization & Polish (OPT-01)
+export {
+  EmbeddingCache,
+  createEmbeddingCache,
+  contentHash,
+  type EmbeddingCacheOptions,
+  type CacheStats,
+} from './cache/index.js';
+
+// Re-export cache stats utilities from embedder
+export {
+  getCacheStats,
+  getCacheHitRate,
+} from './embedding/embedder.js';
