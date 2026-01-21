@@ -30,3 +30,14 @@ export {
   type CheckResult,
   type CoverageResult,
 } from './verification/index.js';
+
+// Phase 4: GSD Integration (VER-04)
+export {
+  quickRetrieve,
+  resetQdrantClient,
+  formatChunksAsContext,
+  formatSingleChunk,
+  summarizeChunks,
+  type QuickRetrieveOptions,
+  type ContextFormatOptions,
+} from './integration/index.js';
