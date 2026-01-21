@@ -39,6 +39,7 @@
   "dependencies": {
     "@qdrant/js-client-rest": "^1.16.2",
     "compromise": "^14.14.3",
+    "lru-cache": "^10.4.3",
     "ollama": "^0.6.0",
     "ts-morph": "^27.0.0",
     "vitest": "^3.0.0",
