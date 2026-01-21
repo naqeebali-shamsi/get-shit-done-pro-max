@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 4 COMPLETE - GSD Integration complete (VER-04)
+**Current focus:** Phase 5 PLANNED - Optimization & Polish (OPT-01 to OPT-04, QUA-02, QUA-03)
 
 ## Current Position
 
-Phase: 4 of 5 (GSD Integration) - COMPLETE
-Plan: 04-02 complete
-Status: Phase 4 complete, ready for Phase 5
-Last activity: 2026-01-22 - Phase 4 executed
+Phase: 5 of 5 (Optimization & Polish) - PLANNED
+Plan: 3 plans created, ready to execute
+Status: Phase 5 planned, ready for execution
+Last activity: 2026-01-22 - Phase 5 planned
 
-Progress: ██████████ 100% (Phase 4 - 2/2 plans)
+Progress: ░░░░░░░░░░ 0% (Phase 5 - 0/3 plans)
 
 ## Performance Metrics
 
@@ -322,10 +322,21 @@ Files modified:
 - package.json (bin entry, files array)
 - bin/install.js (copyDir, RLM copy logic)
 
-## Next Phase
+## Phase 5 Plans
 
-Phase 5: Optimization & Polish
-- OPT-01: Embedding cache layer
-- OPT-02: Performance benchmarking suite
-- OPT-03: FAISS embedded fallback
-- OPT-04: Latency target <500ms
+Phase 5: Optimization & Polish - 3 plans in 2 waves:
+
+| Plan | Wave | Description | Requirements | Status |
+|------|------|-------------|--------------|--------|
+| 05-01 | 1 | Embedding cache layer with LRU | OPT-01 | PENDING |
+| 05-02 | 1 | Performance benchmarking suite | OPT-02 | PENDING |
+| 05-03 | 2 | Graceful degradation, latency verification, docs | OPT-03, OPT-04, QUA-02, QUA-03 | PENDING |
+
+**Research insights applied:**
+- OPT-03 reframed as "graceful degradation" (FAISS skipped - Qdrant quantized matches performance)
+- Primary bottleneck: embedding generation (200-500ms), not vector search (5-20ms)
+- Standard stack: lru-cache ^10.x, Vitest bench, Qdrant scalar quantization
+
+**Wave execution:**
+- Wave 1: 05-01 and 05-02 can run in parallel (no dependencies)
+- Wave 2: 05-03 depends on 05-01 (cache must exist for latency verification)
