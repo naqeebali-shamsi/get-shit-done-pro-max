@@ -3,14 +3,16 @@
   "version": "1.6.4",
   "description": "A meta-prompting, context engineering and spec-driven development system for Claude Code by TACHES.",
   "bin": {
-    "get-shit-done-cc": "bin/install.js"
+    "get-shit-done-cc": "bin/install.js",
+    "rlm": "dist/rlm/cli/rlm-cli.js"
   },
   "files": [
     "bin",
     "commands",
     "get-shit-done",
     "agents",
-    "hooks"
+    "hooks",
+    "dist"
   ],
   "scripts": {
     "build:rlm": "node ./node_modules/typescript/bin/tsc -p tsconfig.json",
