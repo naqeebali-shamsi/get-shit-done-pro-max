@@ -23,11 +23,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### RLM Engine
 
-- [ ] **RLM-01**: RLMEngine with query() and recurse() methods
-- [ ] **RLM-02**: Dispatcher: embed state -> retrieve -> query -> verify -> recurse if needed
-- [ ] **RLM-03**: Evidence tracking (each claim references source chunks)
-- [ ] **RLM-04**: Confidence scoring on results
-- [ ] **RLM-05**: Recursion limits (max depth 5, token budget 2x baseline)
+- [x] **RLM-01**: RLMEngine with query() and recurse() methods
+- [x] **RLM-02**: Dispatcher: embed state -> retrieve -> query -> verify -> recurse if needed
+- [x] **RLM-03**: Evidence tracking (each claim references source chunks)
+- [x] **RLM-04**: Confidence scoring on results
+- [x] **RLM-05**: Recursion limits (max depth 5, token budget 2x baseline)
 
 ### Verification
 
@@ -86,11 +86,11 @@ Explicitly excluded. Documented to prevent scope creep.
 | VEC-02 | Phase 1 | Complete |
 | VEC-03 | Phase 1 | Complete |
 | VEC-04 | Phase 1 | Complete |
-| RLM-01 | Phase 2 | Pending |
-| RLM-02 | Phase 2 | Pending |
-| RLM-03 | Phase 2 | Pending |
-| RLM-04 | Phase 2 | Pending |
-| RLM-05 | Phase 2 | Pending |
+| RLM-01 | Phase 2 | Complete |
+| RLM-02 | Phase 2 | Complete |
+| RLM-03 | Phase 2 | Complete |
+| RLM-04 | Phase 2 | Complete |
+| RLM-05 | Phase 2 | Complete |
 | VER-01 | Phase 3 | Pending |
 | VER-02 | Phase 3 | Pending |
 | VER-03 | Phase 3 | Pending |
@@ -110,4 +110,4 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-21 — Phase 1 requirements complete*
+*Last updated: 2026-01-21 — Phase 2 requirements complete*
