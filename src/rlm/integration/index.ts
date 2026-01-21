@@ -12,6 +12,7 @@ export {
   quickRetrieve,
   resetQdrantClient,
   type QuickRetrieveOptions,
+  type OnErrorCallback,
 } from './quick-retrieve.js';
 
 // Context formatting - format chunks as readable context

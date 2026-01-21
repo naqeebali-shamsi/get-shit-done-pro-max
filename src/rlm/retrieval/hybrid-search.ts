@@ -14,6 +14,16 @@ export interface SearchOptions {
   scoreThreshold?: number;
   filters?: SearchFilters;
   useHybrid?: boolean;  // Enable hybrid (dense + sparse)
+  timeout?: number;  // Timeout in milliseconds (default: 5000)
+}
+
+/**
+ * Extended search result with optional warning for graceful degradation.
+ */
+export interface HybridSearchResult {
+  results: SearchResult[];
+  /** Warning message if search degraded (e.g., Qdrant unavailable) */
+  warning?: string;
 }
 
 export interface SearchFilters {
@@ -27,10 +37,12 @@ const DEFAULT_OPTIONS: SearchOptions = {
   limit: 10,
   scoreThreshold: 0.0,
   useHybrid: true,
+  timeout: 5000,  // 5 second default
 };
 
 /**
  * Perform hybrid search using RRF fusion on dense and sparse vectors.
+ * Gracefully degrades when Qdrant is unavailable - returns empty results with warning.
  *
  * @param client - Qdrant client instance
  * @param collectionName - Name of the collection to search
@@ -44,8 +56,72 @@ export async function hybridSearch(
   query: string,
   options: SearchOptions = {}
 ): Promise<SearchResult[]> {
+  const result = await hybridSearchWithWarning(client, collectionName, query, options);
+  return result.results;
+}
+
+/**
+ * Perform hybrid search with explicit warning support for graceful degradation.
+ * Returns results with optional warning flag when Qdrant unavailable.
+ *
+ * @param client - Qdrant client instance
+ * @param collectionName - Name of the collection to search
+ * @param query - Search query string
+ * @param options - Search configuration options
+ * @returns Object with results array and optional warning
+ */
+export async function hybridSearchWithWarning(
+  client: QdrantClient,
+  collectionName: string,
+  query: string,
+  options: SearchOptions = {}
+): Promise<HybridSearchResult> {
   const opts = { ...DEFAULT_OPTIONS, ...options };
 
+  try {
+    // Create timeout promise
+    const timeoutPromise = new Promise<HybridSearchResult>((_, reject) => {
+      setTimeout(() => reject(new Error('Search timeout exceeded')), opts.timeout);
+    });
+
+    // Create search promise
+    const searchPromise = performSearch(client, collectionName, query, opts);
+
+    // Race between search and timeout
+    return await Promise.race([searchPromise, timeoutPromise]);
+  } catch (error) {
+    // Graceful degradation: return empty results with warning
+    const message = error instanceof Error ? error.message : String(error);
+    const isConnectionError = message.includes('ECONNREFUSED') ||
+                               message.includes('timeout') ||
+                               message.includes('connect');
+
+    if (isConnectionError) {
+      console.warn(`[hybridSearch] Qdrant unavailable: ${message}`);
+      return {
+        results: [],
+        warning: `Qdrant unavailable: ${message}. Results degraded.`,
+      };
+    }
+
+    // Log other errors but still return empty results (graceful)
+    console.error(`[hybridSearch] Search error: ${message}`);
+    return {
+      results: [],
+      warning: `Search error: ${message}`,
+    };
+  }
+}
+
+/**
+ * Internal function to perform the actual search operation.
+ */
+async function performSearch(
+  client: QdrantClient,
+  collectionName: string,
+  query: string,
+  opts: Required<SearchOptions>
+): Promise<HybridSearchResult> {
   // Generate dense embedding for query
   const denseVector = await embedText(query);
 
@@ -62,7 +138,7 @@ export async function hybridSearch(
         {
           query: denseVector,
           using: 'dense',
-          limit: opts.limit! * 2,  // Over-fetch for better fusion
+          limit: opts.limit * 2,  // Over-fetch for better fusion
           ...(filter && { filter }),
         },
         {
@@ -71,16 +147,16 @@ export async function hybridSearch(
             values: sparseVector.values,
           },
           using: 'bm25',
-          limit: opts.limit! * 2,
+          limit: opts.limit * 2,
           ...(filter && { filter }),
         },
       ],
       query: { fusion: 'rrf' },  // Reciprocal Rank Fusion
-      limit: opts.limit!,
+      limit: opts.limit,
       with_payload: true,
     });
 
-    return mapResults(results.points, opts.scoreThreshold!);
+    return { results: mapResults(results.points, opts.scoreThreshold) };
   } else {
     // Dense-only search
     const results = await client.search(collectionName, {
@@ -88,12 +164,12 @@ export async function hybridSearch(
         name: 'dense',
         vector: denseVector,
       },
-      limit: opts.limit!,
+      limit: opts.limit,
       with_payload: true,
       ...(filter && { filter }),
     });
 
-    return mapResults(results, opts.scoreThreshold!);
+    return { results: mapResults(results, opts.scoreThreshold) };
   }
 }
 

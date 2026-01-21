@@ -6,7 +6,9 @@
 
 export {
   hybridSearch,
+  hybridSearchWithWarning,
   searchByMetadata,
   type SearchOptions,
   type SearchFilters,
+  type HybridSearchResult,
 } from './hybrid-search.js';

@@ -11,6 +11,11 @@ import { QdrantClient } from '@qdrant/js-client-rest';
 import { hybridSearch } from '../retrieval/hybrid-search.js';
 import type { Chunk } from '../types.js';
 
+/**
+ * Error callback for monitoring Qdrant failures.
+ */
+export type OnErrorCallback = (error: Error, context: string) => void;
+
 export interface QuickRetrieveOptions {
   /** Maximum number of chunks to return (default: 5) */
   limit?: number;
@@ -18,6 +23,8 @@ export interface QuickRetrieveOptions {
   timeout?: number;
   /** Minimum score threshold (default: 0.3) */
   scoreThreshold?: number;
+  /** Optional callback for monitoring errors (e.g., for metrics/alerting) */
+  onError?: OnErrorCallback;
 }
 
 const DEFAULT_OPTIONS: Required<QuickRetrieveOptions> = {
@@ -34,7 +41,7 @@ let qdrantClientError: Error | null = null;
  * Get or create singleton Qdrant client.
  * Returns null if connection fails (graceful degradation).
  */
-function getQdrantClient(): QdrantClient | null {
+function getQdrantClient(onError?: OnErrorCallback): QdrantClient | null {
   // If we already have a client, return it
   if (qdrantClient) {
     return qdrantClient;
@@ -42,6 +49,10 @@ function getQdrantClient(): QdrantClient | null {
 
   // If we previously failed, don't retry (avoid repeated connection attempts)
   if (qdrantClientError) {
+    // Notify via callback if provided
+    if (onError) {
+      onError(qdrantClientError, 'client_creation');
+    }
     return null;
   }
 
@@ -51,7 +62,11 @@ function getQdrantClient(): QdrantClient | null {
     return qdrantClient;
   } catch (error) {
     qdrantClientError = error instanceof Error ? error : new Error(String(error));
-    console.error(`[quickRetrieve] Failed to create Qdrant client: ${qdrantClientError.message}`);
+    console.warn(`[quickRetrieve] Qdrant unavailable: ${qdrantClientError.message}`);
+    // Notify via callback for monitoring
+    if (onError) {
+      onError(qdrantClientError, 'client_creation');
+    }
     return null;
   }
 }
@@ -86,15 +101,20 @@ export async function quickRetrieve(
   const collectionName = process.env.RLM_COLLECTION || 'codebase';
 
   // Get client (may be null if connection failed)
-  const client = getQdrantClient();
+  const client = getQdrantClient(opts.onError);
   if (!client) {
+    // Log that we're returning empty due to unavailable Qdrant
+    console.warn('[quickRetrieve] Returning empty results - Qdrant unavailable');
     return [];
   }
 
   try {
     // Create timeout promise
     const timeoutPromise = new Promise<Chunk[]>((resolve) => {
-      setTimeout(() => resolve([]), opts.timeout);
+      setTimeout(() => {
+        console.warn(`[quickRetrieve] Search timeout (${opts.timeout}ms) - returning empty results`);
+        resolve([]);
+      }, opts.timeout);
     });
 
     // Create search promise
@@ -109,9 +129,23 @@ export async function quickRetrieve(
     // Race between search and timeout
     return await Promise.race([searchPromise, timeoutPromise]);
   } catch (error) {
-    // Log error but never throw
-    const message = error instanceof Error ? error.message : String(error);
-    console.error(`[quickRetrieve] Search failed: ${message}`);
+    // Graceful degradation: log error and notify callback, but never throw
+    const err = error instanceof Error ? error : new Error(String(error));
+    const isConnectionError = err.message.includes('ECONNREFUSED') ||
+                               err.message.includes('timeout') ||
+                               err.message.includes('connect');
+
+    if (isConnectionError) {
+      console.warn(`[quickRetrieve] Qdrant unavailable: ${err.message}`);
+    } else {
+      console.error(`[quickRetrieve] Search failed: ${err.message}`);
+    }
+
+    // Notify via callback for monitoring
+    if (opts.onError) {
+      opts.onError(err, 'search');
+    }
+
     return [];
   }
 }
