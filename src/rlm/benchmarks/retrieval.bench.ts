@@ -50,7 +50,7 @@ async function checkCollectionExists(): Promise<boolean> {
   if (!qdrantClient) return false;
   try {
     const info = await qdrantClient.getCollection(collectionName);
-    return info.points_count > 0;
+    return (info.points_count ?? 0) > 0;
   } catch {
     console.warn(`[bench] Collection '${collectionName}' not found - skipping search benchmarks`);
     return false;
