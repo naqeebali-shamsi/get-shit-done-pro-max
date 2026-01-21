@@ -56,7 +56,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- Pre-existing TypeScript errors in chunking module (ast-chunker.ts, markdown-chunker.ts, parser.ts) from Plan 01-02/01-03. Files still emit but strict mode fails. Likely web-tree-sitter type definition issues.
+None currently. Previous TypeScript errors in chunking module resolved by updating to named imports from web-tree-sitter (Parser, Language, Node types).
 
 ## Session Continuity
 
