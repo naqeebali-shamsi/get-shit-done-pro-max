@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-01-21)
 
 ## Current Position
 
-Phase: 5 of 5 (Optimization & Polish) - PLANNED
-Plan: 3 plans created, ready to execute
-Status: Phase 5 planned, ready for execution
-Last activity: 2026-01-22 - Phase 5 planned
+Phase: 5 of 5 (Optimization & Polish) - IN PROGRESS
+Plan: Wave 1 complete (05-01 and 05-02 both done)
+Status: Wave 1 complete, Wave 2 (05-03) ready to execute
+Last activity: 2026-01-22 - Plan 05-01 complete (embedding cache layer)
 
-Progress: ░░░░░░░░░░ 0% (Phase 5 - 0/3 plans)
+Progress: ██████░░░░ 66% (Phase 5 - 2/3 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
+- Total plans completed: 16
 - Average duration: 6.5 min
-- Total execution time: ~1.6 hours
+- Total execution time: ~1.8 hours
 
 **By Phase:**
 
@@ -87,7 +87,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: Phase 4 Plan 02 complete
+Stopped at: Phase 5 Wave 1 complete (05-01, 05-02)
 Resume file: None
 
 ## Phase 3 Complete - Summary
@@ -328,8 +328,8 @@ Phase 5: Optimization & Polish - 3 plans in 2 waves:
 
 | Plan | Wave | Description | Requirements | Status |
 |------|------|-------------|--------------|--------|
-| 05-01 | 1 | Embedding cache layer with LRU | OPT-01 | PENDING |
-| 05-02 | 1 | Performance benchmarking suite | OPT-02 | PENDING |
+| 05-01 | 1 | Embedding cache layer with LRU | OPT-01 | COMPLETE |
+| 05-02 | 1 | Performance benchmarking suite | OPT-02 | COMPLETE |
 | 05-03 | 2 | Graceful degradation, latency verification, docs | OPT-03, OPT-04, QUA-02, QUA-03 | PENDING |
 
 **Research insights applied:**
@@ -340,3 +340,47 @@ Phase 5: Optimization & Polish - 3 plans in 2 waves:
 **Wave execution:**
 - Wave 1: 05-01 and 05-02 can run in parallel (no dependencies)
 - Wave 2: 05-03 depends on 05-01 (cache must exist for latency verification)
+
+### Plan 05-01 Complete - Summary
+
+Embedding cache layer with LRU eviction:
+
+| Module | Status | Key Exports |
+|--------|--------|-------------|
+| cache/embedding-cache | Done | EmbeddingCache, createEmbeddingCache, contentHash, CacheStats |
+| cache/index | Done | Re-exports all cache utilities |
+| embedding/embedder | Updated | Uses LRU cache singleton, getCacheStats, getCacheHitRate |
+
+Key features:
+- Content hash using SHA-256 truncated to 16 chars (64 bits)
+- LRU cache with 10k entries, 500MB memory limit
+- TTL support (24 hours, updateAgeOnGet=true)
+- useCache parameter for bypass during benchmarking
+- Cache stats tracking: hits, misses, size, calculatedSize, hitRate
+
+Dependencies added: lru-cache@^10.4.3
+
+OPT-01 satisfied: Embedding cache layer reduces redundant Ollama calls.
+
+### Plan 05-02 Complete - Summary
+
+Performance benchmarking suite with Vitest bench:
+
+| Module | Status | Key Exports |
+|--------|--------|-------------|
+| vitest.config.ts | Done | Benchmark configuration |
+| src/rlm/benchmarks/retrieval.bench.ts | Done | Benchmark suite |
+| package.json | Updated | bench and bench:ci scripts |
+
+Key features:
+- Embedding generation benchmarks (cold vs cached)
+- Hybrid search benchmarks (5/10 results, dense vs hybrid)
+- quickRetrieve end-to-end latency benchmarks
+- Graceful degradation when Ollama/Qdrant unavailable
+- JSON output for CI tracking (.planning/benchmarks/results.json)
+
+Usage:
+- `npm run bench` - interactive benchmark execution
+- `npm run bench:ci` - JSON output for CI
+
+OPT-02 satisfied: Vitest bench suite measuring embedding and retrieval latency.
