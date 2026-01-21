@@ -11,3 +11,4 @@ export * from './storage/index.js';
 export * from './embedding/index.js';
 export * from './retrieval/index.js';
 export * from './indexing/index.js';
+export * from './engine/index.js';
