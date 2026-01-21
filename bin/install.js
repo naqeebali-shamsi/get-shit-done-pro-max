@@ -210,6 +210,22 @@ function cleanupOrphanedHooks(settings) {
 }
 
 /**
+ * Simple recursive directory copy (for RLM dist)
+ */
+function copyDir(src, dest) {
+  fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+/**
  * Verify a directory exists and contains files
  */
 function verifyInstalled(dirPath, description) {
@@ -364,6 +380,18 @@ function install(isGlobal) {
     } else {
       failures.push('hooks');
     }
+  }
+
+  // Copy RLM distribution (if built) - optional component
+  const rlmDistSrc = path.join(src, 'dist', 'rlm');
+  if (fs.existsSync(rlmDistSrc)) {
+    const rlmDistDest = path.join(claudeDir, 'rlm');
+    // Clean previous install
+    if (fs.existsSync(rlmDistDest)) {
+      fs.rmSync(rlmDistDest, { recursive: true });
+    }
+    copyDir(rlmDistSrc, rlmDistDest);
+    console.log(`  ${green}✓${reset} Installed RLM modules`);
   }
 
   // If critical components failed, exit with error
