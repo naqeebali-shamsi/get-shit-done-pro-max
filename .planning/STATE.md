@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 4 in progress - GSD Integration (Plan 04-01 complete)
+**Current focus:** Phase 4 in progress - GSD Integration (Plan 04-02 complete)
 
 ## Current Position
 
 Phase: 4 of 5 (GSD Integration)
-Plan: 04-01 complete
-Status: Plan 04-01 complete, ready for Plan 04-02
-Last activity: 2026-01-22 - Plan 04-01 executed
+Plan: 04-02 complete
+Status: Plan 04-02 complete, ready for Plan 04-03
+Last activity: 2026-01-22 - Plan 04-02 executed
 
-Progress: ███░░░░░░░ 33% (Phase 4 - 1/3 plans estimated)
+Progress: ██████░░░░ 66% (Phase 4 - 2/3 plans estimated)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 6.4 min
-- Total execution time: ~1.5 hours
+- Total plans completed: 14
+- Average duration: 6.5 min
+- Total execution time: ~1.6 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: ███░░░░░░░ 33% (Phase 4 - 1/3 plans estimated)
 | 01-core-infrastructure | 5 | 32 min | 6.4 min |
 | 02-rlm-engine-core | 4 | 29 min | 7.3 min |
 | 03-verification-loop | 3 | 30 min | 10 min |
-| 04-gsd-integration | 1 | 8 min | 8 min |
+| 04-gsd-integration | 2 | 16 min | 8 min |
 
 **Recent Trend:**
-- Last 5 plans: 8, 10, 12, 8, 8 min
+- Last 5 plans: 10, 12, 8, 8, 8 min
 - Trend: Stable (integration plans efficient)
 
 ## Accumulated Context
@@ -87,7 +87,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: Phase 4 Plan 01 complete
+Stopped at: Phase 4 Plan 02 complete
 Resume file: None
 
 ## Phase 3 Complete - Summary
@@ -286,8 +286,28 @@ All Phase 4 exports available from `src/rlm/index.ts`:
 - quickRetrieve, resetQdrantClient
 - formatChunksAsContext, formatSingleChunk, summarizeChunks
 
+### Plan 04-02 Complete - Summary
+
+RLM CLI and install integration:
+
+| Module | Status | Key Exports |
+|--------|--------|-------------|
+| cli/rlm-cli | Done | main (CLI entry point) |
+| cli/index | Done | Re-exports CLI main |
+
+Key features:
+- Standalone CLI with index, query, status commands
+- package.json bin entry: `"rlm": "dist/rlm/cli/rlm-cli.js"`
+- install.js copies RLM dist when available (optional component)
+- Graceful degradation - GSD works without RLM
+
+Files modified:
+- src/rlm/cli/rlm-cli.ts (new)
+- src/rlm/cli/index.ts (new)
+- package.json (bin entry, files array)
+- bin/install.js (copyDir, RLM copy logic)
+
 ## Next Steps
 
 Phase 4 continues:
-- Plan 04-02: GSD hook integration using quick retrieval
-- Plan 04-03: Full CLI integration
+- Plan 04-03: Full hook integration with GSD commands
