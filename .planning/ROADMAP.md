@@ -49,7 +49,7 @@ None (custom system, patterns from research)
 **Requirements**: RLM-01, RLM-02, RLM-03, RLM-04, RLM-05
 **Research**: Likely (REPL state management patterns)
 **Research topics**: Persistent vs ephemeral state, sub-LM delegation patterns
-**Plans**: TBD
+**Plans**: 4 (02-01 to 02-04)
 
 ### Phase 3: Verification Loop
 **Goal**: Add evidence validation and recursive refinement on failure
@@ -81,11 +81,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Core Infrastructure | 5/5 | ✓ Complete | 2026-01-21 |
-| 2. RLM Engine Core | 0/TBD | Not started | - |
+| 2. RLM Engine Core | 0/4 | Planned | - |
 | 3. Verification Loop | 0/TBD | Not started | - |
 | 4. GSD Integration | 0/TBD | Not started | - |
 | 5. Optimization & Polish | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-21*
-*Last updated: 2026-01-21 — Phase 1 complete*
+*Last updated: 2026-01-21 — Phase 2 plans created*

@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 1 COMPLETE — Ready for Phase 2 (MCP Server)
+**Current focus:** Phase 2 planned — Ready for execution (RLM Engine Core)
 
 ## Current Position
 
-Phase: 1 of 5 (Core Infrastructure) - COMPLETE
-Plan: All 5 plans complete
-Status: Phase Complete
-Last activity: 2026-01-21 — Plan 01-05 complete (hybrid search, indexing pipeline)
+Phase: 2 of 5 (RLM Engine Core) - PLANNED
+Plan: 4 plans created (02-01 to 02-04)
+Status: Ready for execution
+Last activity: 2026-01-21 — Phase 2 plans created
 
 Progress: ██████████ 100% (Phase 1)
 
@@ -77,5 +77,20 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Phase 1 complete, ready for Phase 2 (MCP Server)
+Stopped at: Phase 2 plans created, ready for execution
 Resume file: None
+
+## Phase 2 Plan Overview
+
+4 plans in 3 waves:
+
+| Plan | Wave | Description | Requirements |
+|------|------|-------------|--------------|
+| 02-01 | 1 | RLM types and state management | RLM-01, RLM-05 foundation |
+| 02-02 | 2 | RLMEngine with query/recurse | RLM-01, RLM-05 |
+| 02-03 | 2 | Evidence tracker and confidence | RLM-03, RLM-04 |
+| 02-04 | 3 | Dispatcher pipeline integration | RLM-02 |
+
+Dependencies:
+- 02-01 → 02-02, 02-03 (types/state foundation)
+- 02-02, 02-03 → 02-04 (dispatcher needs engine + evidence)
