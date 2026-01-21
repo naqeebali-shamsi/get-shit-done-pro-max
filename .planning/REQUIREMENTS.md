@@ -31,9 +31,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Verification
 
-- [ ] **VER-01**: Verifier module with checks: typecheck, test execution, impact scan
-- [ ] **VER-02**: Evidence coverage check (claims must reference chunks)
-- [ ] **VER-03**: Recursive refinement on verification failure
+- [x] **VER-01**: Verifier module with checks: typecheck, test execution, impact scan
+- [x] **VER-02**: Evidence coverage check (claims must reference chunks)
+- [x] **VER-03**: Recursive refinement on verification failure
 - [ ] **VER-04**: Integration with existing /gsd commands
 
 ### Optimization
@@ -91,9 +91,9 @@ Explicitly excluded. Documented to prevent scope creep.
 | RLM-03 | Phase 2 | Complete |
 | RLM-04 | Phase 2 | Complete |
 | RLM-05 | Phase 2 | Complete |
-| VER-01 | Phase 3 | Pending |
-| VER-02 | Phase 3 | Pending |
-| VER-03 | Phase 3 | Pending |
+| VER-01 | Phase 3 | Complete |
+| VER-02 | Phase 3 | Complete |
+| VER-03 | Phase 3 | Complete |
 | VER-04 | Phase 4 | Pending |
 | OPT-01 | Phase 5 | Pending |
 | OPT-02 | Phase 5 | Pending |
@@ -110,4 +110,4 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-21 — Phase 2 requirements complete*
+*Last updated: 2026-01-21 — Phase 3 requirements complete*
