@@ -17,6 +17,8 @@
   "scripts": {
     "build:rlm": "node ./node_modules/typescript/bin/tsc -p tsconfig.json",
     "test:rlm": "node --test dist/rlm/**/*.test.js",
+    "bench": "node ./node_modules/vitest/dist/cli.js bench",
+    "bench:ci": "node ./node_modules/vitest/dist/cli.js bench --reporter=json --outputFile=.planning/benchmarks/results.json",
     "postinstall:rlm": "node -e \"const fs=require('fs');const path=require('path');const dest='src/rlm/chunking/grammars';if(!fs.existsSync(dest))fs.mkdirSync(dest,{recursive:true});['tree-sitter-javascript','tree-sitter-typescript'].forEach(pkg=>{const src=path.join('node_modules',pkg);if(fs.existsSync(src)){const wasm=fs.readdirSync(src).filter(f=>f.endsWith('.wasm'));wasm.forEach(f=>fs.copyFileSync(path.join(src,f),path.join(dest,f)))}});\""
   },
   "keywords": [
