@@ -20,6 +20,7 @@ export interface CheckResult {
     message: string;
     file?: string;
     line?: number;
+    severity?: 'error' | 'warning';
   }>;
   duration: number; // milliseconds
 }
