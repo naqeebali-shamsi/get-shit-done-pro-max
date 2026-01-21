@@ -43,7 +43,7 @@ export function chunkMarkdown(
   filePath: string,
   options: MarkdownChunkOptions = {}
 ): Chunk[] {
-  const opts = { ...DEFAULT_OPTIONS, ...options };
+  const opts = { ...DEFAULT_OPTIONS, ...options } as Required<MarkdownChunkOptions>;
   const fileHash = createHash('sha256').update(content).digest('hex').slice(0, 16);
   const lines = content.split('\n');
 
