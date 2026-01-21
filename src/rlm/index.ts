@@ -6,5 +6,6 @@
  */
 
 export * from './types.js';
-
-// Module exports added as implementations complete
+export * from './chunking/index.js';
+export * from './storage/index.js';
+export * from './embedding/index.js';

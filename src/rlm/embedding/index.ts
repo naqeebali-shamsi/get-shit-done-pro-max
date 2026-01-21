@@ -2,7 +2,14 @@
  * Embedding Module
  *
  * Ollama embedding wrapper for generating vector representations.
- * Implementations added in subsequent plans.
  */
 
-export {};  // Placeholder - implementations in subsequent plans
+export {
+  embedText,
+  embedBatch,
+  embedChunks,
+  generateSparseVector,
+  clearCache,
+  getCacheSize,
+  type EmbedderConfig,
+} from './embedder.js';

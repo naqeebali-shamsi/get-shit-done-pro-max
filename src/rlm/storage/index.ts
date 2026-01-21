@@ -2,7 +2,14 @@
  * Storage Module
  *
  * Qdrant client wrapper for vector storage and retrieval.
- * Implementations added in subsequent plans.
  */
 
-export {};  // Placeholder - implementations in subsequent plans
+export {
+  createQdrantClient,
+  ensureCollection,
+  upsertPoints,
+  deleteByFileHash,
+  getCollectionInfo,
+  type QdrantConfig,
+  type PointData,
+} from './qdrant-client.js';
