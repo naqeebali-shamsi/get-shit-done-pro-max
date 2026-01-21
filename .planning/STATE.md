@@ -5,34 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 2 in progress — Plans 02-01, 02-03 complete (RLM Engine Core)
+**Current focus:** Phase 2 in progress - Plans 02-01, 02-02, 02-03 complete, 02-04 unblocked
 
 ## Current Position
 
 Phase: 2 of 5 (RLM Engine Core) - IN PROGRESS
-Plan: 02-01, 02-03 complete; 02-02 pending, 02-04 blocked
-Status: Evidence tracking and confidence scoring done
-Last activity: 2026-01-21 — Plan 02-03 executed
+Plan: 02-01, 02-02, 02-03 complete; 02-04 ready
+Status: RLMEngine with query/recurse implemented
+Last activity: 2026-01-21 - Plan 02-02 executed
 
-Progress: █████░░░░░ 50% (Phase 2)
+Progress: ███████░░░ 75% (Phase 2)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 6.0 min
-- Total execution time: 0.70 hours
+- Total plans completed: 8
+- Average duration: 6.1 min
+- Total execution time: 0.82 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-core-infrastructure | 5 | 32 min | 6.4 min |
-| 02-rlm-engine-core | 2 | 9 min | 4.5 min |
+| 02-rlm-engine-core | 3 | 21 min | 7.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 6, 5, 8, 5, 4 min
-- Trend: Improving (simple focused plans)
+- Last 5 plans: 5, 8, 5, 4, 12 min
+- Trend: Stable (zod compatibility added time to 02-02)
 
 ## Accumulated Context
 
@@ -48,11 +48,13 @@ Recent decisions affecting current work:
 - REPL-style state: context stored externally, LLM inspects via tools
 - llama3.1:8b as default model with 16K token budget
 - Max recursion depth of 5 (configurable via RLMEngineConfig)
+- zod@3.x for schema validation (v4 not compatible with zod-to-json-schema)
+- Explicit Ollama Tool format for tool definitions (not zodToJsonSchema)
 
 ### Content Workflow
 
 Parallel workflow: After each milestone, write article for Medium/LinkedIn/dev.to.
-- Persona: Builder's log → tutorials as system matures
+- Persona: Builder's log -> tutorials as system matures
 - See ROADMAP.md Content Workflow section
 
 ### Phase 1 Complete - Summary
@@ -81,7 +83,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Plan 02-03 complete, 02-02 in parallel, 02-04 next
+Stopped at: Plan 02-02 complete, 02-04 unblocked and ready
 Resume file: None
 
 ## Phase 2 Plan Overview
@@ -91,13 +93,13 @@ Resume file: None
 | Plan | Wave | Description | Requirements | Status |
 |------|------|-------------|--------------|--------|
 | 02-01 | 1 | RLM types and state management | RLM-01, RLM-05 foundation | COMPLETE |
-| 02-02 | 2 | RLMEngine with query/recurse | RLM-01, RLM-05 | Pending |
+| 02-02 | 2 | RLMEngine with query/recurse | RLM-01, RLM-05 | COMPLETE |
 | 02-03 | 2 | Evidence tracker and confidence | RLM-03, RLM-04 | COMPLETE |
-| 02-04 | 3 | Dispatcher pipeline integration | RLM-02 | Blocked (needs 02-02) |
+| 02-04 | 3 | Dispatcher pipeline integration | RLM-02 | Ready |
 
 Dependencies:
-- 02-01 → 02-02, 02-03 (types/state foundation) **COMPLETE**
-- 02-02, 02-03 → 02-04 (dispatcher needs engine + evidence) **02-03 DONE, awaiting 02-02**
+- 02-01 -> 02-02, 02-03 (types/state foundation) **COMPLETE**
+- 02-02, 02-03 -> 02-04 (dispatcher needs engine + evidence) **UNBLOCKED**
 
 ### Plan 02-01 Complete - Summary
 
@@ -116,6 +118,25 @@ Key methods in RLMState:
 - `set/getVariable()` - REPL-style storage
 
 All exports available from `src/rlm/engine/index.ts` and main `src/rlm/index.ts`.
+
+### Plan 02-02 Complete - Summary
+
+RLMEngine with query and recurse methods:
+
+| Module | Status | Key Exports |
+|--------|--------|-------------|
+| engine/tools | Done | rlmTools, Zod schemas, tool type exports |
+| engine/rlm-engine | Done | RLMEngine class |
+
+Key features:
+- `query(input, chunks, scores)` - Main entry point
+- `recurse(refinedQuery)` - Continue with refined query
+- Tool-based context inspection (REPL pattern)
+- 5 tools: peek_context, search_context, get_chunk, sub_query, final_answer
+- Token budget tracking (RLM-05)
+- Depth limits enforced (max 5, configurable)
+
+Dependencies added: zod@^3.23.8, zod-to-json-schema@^3.24.0
 
 ### Plan 02-03 Complete - Summary
 
