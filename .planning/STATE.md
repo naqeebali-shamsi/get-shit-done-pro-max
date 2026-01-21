@@ -5,34 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 2 in progress — Plan 02-01 complete (RLM Engine Core)
+**Current focus:** Phase 2 in progress — Plans 02-01, 02-03 complete (RLM Engine Core)
 
 ## Current Position
 
 Phase: 2 of 5 (RLM Engine Core) - IN PROGRESS
-Plan: 02-01 complete, 02-02/02-03/02-04 pending
-Status: Plan 02-01 complete - types and state management done
-Last activity: 2026-01-21 — Plan 02-01 executed
+Plan: 02-01, 02-03 complete; 02-02 pending, 02-04 blocked
+Status: Evidence tracking and confidence scoring done
+Last activity: 2026-01-21 — Plan 02-03 executed
 
-Progress: ██░░░░░░░░ 25% (Phase 2)
+Progress: █████░░░░░ 50% (Phase 2)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 6.2 min
-- Total execution time: 0.62 hours
+- Total plans completed: 7
+- Average duration: 6.0 min
+- Total execution time: 0.70 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-core-infrastructure | 5 | 32 min | 6.4 min |
-| 02-rlm-engine-core | 1 | 5 min | 5.0 min |
+| 02-rlm-engine-core | 2 | 9 min | 4.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 5, 6, 5, 8, 5 min
-- Trend: Steady (parallel execution)
+- Last 5 plans: 6, 5, 8, 5, 4 min
+- Trend: Improving (simple focused plans)
 
 ## Accumulated Context
 
@@ -81,7 +81,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Plan 02-01 complete, ready for 02-02/02-03
+Stopped at: Plan 02-03 complete, 02-02 in parallel, 02-04 next
 Resume file: None
 
 ## Phase 2 Plan Overview
@@ -92,12 +92,12 @@ Resume file: None
 |------|------|-------------|--------------|--------|
 | 02-01 | 1 | RLM types and state management | RLM-01, RLM-05 foundation | COMPLETE |
 | 02-02 | 2 | RLMEngine with query/recurse | RLM-01, RLM-05 | Pending |
-| 02-03 | 2 | Evidence tracker and confidence | RLM-03, RLM-04 | Pending |
-| 02-04 | 3 | Dispatcher pipeline integration | RLM-02 | Pending |
+| 02-03 | 2 | Evidence tracker and confidence | RLM-03, RLM-04 | COMPLETE |
+| 02-04 | 3 | Dispatcher pipeline integration | RLM-02 | Blocked (needs 02-02) |
 
 Dependencies:
-- 02-01 → 02-02, 02-03 (types/state foundation) **UNBLOCKED**
-- 02-02, 02-03 → 02-04 (dispatcher needs engine + evidence)
+- 02-01 → 02-02, 02-03 (types/state foundation) **COMPLETE**
+- 02-02, 02-03 → 02-04 (dispatcher needs engine + evidence) **02-03 DONE, awaiting 02-02**
 
 ### Plan 02-01 Complete - Summary
 
@@ -116,3 +116,21 @@ Key methods in RLMState:
 - `set/getVariable()` - REPL-style storage
 
 All exports available from `src/rlm/engine/index.ts` and main `src/rlm/index.ts`.
+
+### Plan 02-03 Complete - Summary
+
+Evidence tracking and confidence scoring:
+
+| Module | Status | Key Exports |
+|--------|--------|-------------|
+| evidence/tracker | Done | EvidenceTracker class, Claim type |
+| evidence/confidence | Done | calculateConfidence, generateConfidenceReport, ConfidenceFactors |
+
+Key features:
+- Links claims to source chunks (RLM-03)
+- Confidence from retrieval scores, not verbal (RLM-04)
+- Coverage checking for evidence gaps
+- Configurable confidence weights
+- Warning generation for low confidence
+
+All exports available from `src/rlm/evidence/index.ts` and main `src/rlm/index.ts`.
