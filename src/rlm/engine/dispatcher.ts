@@ -3,6 +3,8 @@
  *
  * Orchestrates the full RLM pipeline: embed -> retrieve -> query -> verify -> recurse.
  * Main entry point for GSD commands.
+ *
+ * VER-03: Integrates Verifier for FIRE-style recursive refinement on failure.
  */
 
 import { QdrantClient } from '@qdrant/js-client-rest';
@@ -16,6 +18,11 @@ import {
   generateConfidenceReport,
   type ConfidenceReport,
 } from '../evidence/confidence.js';
+import { Verifier } from '../verification/verifier.js';
+import type {
+  VerifierConfig,
+  VerificationResult,
+} from '../verification/types.js';
 import type { Chunk } from '../types.js';
 
 /**
@@ -27,6 +34,8 @@ export interface DispatcherConfig {
   collectionName: string;
   minConfidence: number;
   maxRecursions: number;
+  verifier?: Partial<VerifierConfig>;
+  enableVerification: boolean;
 }
 
 export const DEFAULT_DISPATCHER_CONFIG: DispatcherConfig = {
@@ -38,6 +47,7 @@ export const DEFAULT_DISPATCHER_CONFIG: DispatcherConfig = {
   collectionName: 'codebase',
   minConfidence: 0.5,
   maxRecursions: 3,
+  enableVerification: true,
 };
 
 /**
@@ -51,6 +61,7 @@ export interface VerifiedResult {
   tokensUsed: number;
   recursionDepth: number;
   iterations: number;
+  verification?: VerificationResult;
 }
 
 /**
@@ -61,16 +72,20 @@ export class RLMDispatcher {
   private config: DispatcherConfig;
   private engine: RLMEngine;
   private tracker: EvidenceTracker;
+  private verifier: Verifier | null;
 
   constructor(client: QdrantClient, config: Partial<DispatcherConfig> = {}) {
     this.client = client;
     this.config = { ...DEFAULT_DISPATCHER_CONFIG, ...config };
     this.engine = new RLMEngine(this.config.engine);
     this.tracker = new EvidenceTracker();
+    this.verifier = this.config.enableVerification
+      ? new Verifier(this.config.verifier)
+      : null;
   }
 
   /**
-   * Main dispatch method (RLM-02)
+   * Main dispatch method (RLM-02, VER-03)
    *
    * Pipeline: embed state -> retrieve -> query -> verify -> recurse if needed
    */
@@ -78,6 +93,8 @@ export class RLMDispatcher {
     let iterations = 0;
     let currentQuery = query;
     let result: RLMResult | null = null;
+    let previousVerification: VerificationResult | undefined;
+    let verification: VerificationResult | undefined;
 
     // Reset tracker for new query
     this.tracker.clear();
@@ -98,8 +115,8 @@ export class RLMDispatcher {
       }
 
       // Extract chunks and scores
-      const chunks = searchResults.map(r => r.chunk);
-      const scores = searchResults.map(r => r.score);
+      const chunks = searchResults.map((r) => r.chunk);
+      const scores = searchResults.map((r) => r.score);
 
       // Register chunks with tracker
       this.tracker.registerChunks(
@@ -126,15 +143,45 @@ export class RLMDispatcher {
       // 3. Track evidence
       this.trackEvidence(result);
 
-      // 4. Verify and check if recursion needed
+      // 4. Verify result (VER-03 integration)
       const confidenceReport = this.evaluateResult(result);
 
-      // If confidence meets threshold or can't recurse, return
-      if (confidenceReport.score >= this.config.minConfidence || !result.canRecurse) {
-        return this.buildResult(query, result, confidenceReport, iterations);
+      if (this.verifier) {
+        previousVerification = verification;
+        verification = await this.verifier.verify(
+          result.response,
+          result.evidence
+        );
+
+        // Check if we should recurse based on verification
+        if (
+          !verification.confident &&
+          result.canRecurse &&
+          this.shouldRecurseForVerification(verification, previousVerification)
+        ) {
+          // Use verification's suggested refinement or generate one
+          if (verification.suggestedRefinement) {
+            currentQuery = verification.suggestedRefinement;
+            continue;
+          }
+        }
       }
 
-      // 5. Prepare for recursion with refined query
+      // 5. Check confidence threshold (existing logic)
+      if (
+        confidenceReport.score >= this.config.minConfidence ||
+        !result.canRecurse
+      ) {
+        return this.buildResult(
+          query,
+          result,
+          confidenceReport,
+          iterations,
+          verification
+        );
+      }
+
+      // 6. Prepare for recursion with refined query
       if (result.refinedQuery) {
         currentQuery = result.refinedQuery;
       } else {
@@ -152,8 +199,68 @@ export class RLMDispatcher {
       query,
       result || this.buildEmptyRLMResult(),
       finalReport,
-      iterations
+      iterations,
+      verification
     );
+  }
+
+  /**
+   * Check if we should recurse based on verification (FIRE pattern)
+   *
+   * Prevents infinite loops by checking:
+   * - Same errors don't repeat
+   * - Confidence is improving
+   */
+  private shouldRecurseForVerification(
+    current: VerificationResult,
+    previous?: VerificationResult
+  ): boolean {
+    // First verification - allow recursion if not confident
+    if (!previous) {
+      return !current.confident;
+    }
+
+    // Check if confidence improved meaningfully
+    const improvement =
+      current.overallConfidence - previous.overallConfidence;
+    if (improvement < 0.05) {
+      // Diminishing returns - don't recurse
+      return false;
+    }
+
+    // Check if same errors are repeating
+    if (this.hasSameErrors(current, previous)) {
+      return false;
+    }
+
+    return !current.confident;
+  }
+
+  /**
+   * Check if the same errors are repeating between verifications
+   */
+  private hasSameErrors(
+    current: VerificationResult,
+    previous: VerificationResult
+  ): boolean {
+    if (current.errors.length === 0 || previous.errors.length === 0) {
+      return false;
+    }
+
+    // Compare error messages
+    const currentMessages = new Set(current.errors.map((e) => e.message));
+    const previousMessages = new Set(previous.errors.map((e) => e.message));
+
+    // Count how many errors are the same
+    let sameCount = 0;
+    for (const msg of currentMessages) {
+      if (previousMessages.has(msg)) {
+        sameCount++;
+      }
+    }
+
+    // If more than 50% of errors are the same, consider them repeating
+    return sameCount > current.errors.length * 0.5;
   }
 
   /**
@@ -171,16 +278,15 @@ export class RLMDispatcher {
   private evaluateResult(result: RLMResult): ConfidenceReport {
     const claims = this.tracker.extractClaims(result.response);
     const chunks = new Map(
-      this.tracker.getAllEvidence().flatMap(e =>
-        e.sourceChunks.map(id => [id, this.tracker.getChunk(id)!] as const)
-      ).filter(([, chunk]) => chunk !== undefined)
+      this.tracker
+        .getAllEvidence()
+        .flatMap((e) =>
+          e.sourceChunks.map((id) => [id, this.tracker.getChunk(id)!] as const)
+        )
+        .filter(([, chunk]) => chunk !== undefined)
     );
 
-    return generateConfidenceReport(
-      result.evidence,
-      claims.length,
-      chunks
-    );
+    return generateConfidenceReport(result.evidence, claims.length, chunks);
   }
 
   /**
@@ -216,7 +322,8 @@ export class RLMDispatcher {
     _query: string,
     result: RLMResult,
     confidence: ConfidenceReport,
-    iterations: number
+    iterations: number,
+    verification?: VerificationResult
   ): VerifiedResult {
     return {
       response: result.response,
@@ -226,6 +333,7 @@ export class RLMDispatcher {
       tokensUsed: result.tokensUsed,
       recursionDepth: result.depth,
       iterations,
+      verification,
     };
   }
 
@@ -283,6 +391,14 @@ export class RLMDispatcher {
     this.config = { ...this.config, ...config };
     if (config.engine) {
       this.engine = new RLMEngine(this.config.engine);
+    }
+    if (config.verifier && this.verifier) {
+      this.verifier.configure(config.verifier);
+    }
+    if (config.enableVerification !== undefined) {
+      this.verifier = config.enableVerification
+        ? new Verifier(this.config.verifier)
+        : null;
     }
   }
 
