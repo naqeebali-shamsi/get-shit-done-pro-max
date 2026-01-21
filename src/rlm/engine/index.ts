@@ -20,3 +20,10 @@ export {
   type SubQueryArgs,
   type FinalAnswerArgs,
 } from './tools.js';
+export {
+  RLMDispatcher,
+  createDispatcher,
+  DEFAULT_DISPATCHER_CONFIG,
+  type DispatcherConfig,
+  type VerifiedResult,
+} from './dispatcher.js';
