@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 5 PLANNED - Optimization & Polish (OPT-01 to OPT-04, QUA-02, QUA-03)
+**Current focus:** MILESTONE 1 COMPLETE - All phases done
 
 ## Current Position
 
-Phase: 5 of 5 (Optimization & Polish) - IN PROGRESS
-Plan: Wave 1 complete (05-01 and 05-02 both done)
-Status: Wave 1 complete, Wave 2 (05-03) ready to execute
-Last activity: 2026-01-22 - Plan 05-01 complete (embedding cache layer)
+Phase: 5 of 5 (Optimization & Polish) - COMPLETE
+Plan: All 3 plans complete (05-01, 05-02, 05-03)
+Status: MILESTONE 1 COMPLETE
+Last activity: 2026-01-22 - Plan 05-03 complete (graceful degradation, latency verification, docs)
 
-Progress: ██████░░░░ 66% (Phase 5 - 2/3 plans)
+Progress: ██████████ 100% (Phase 5 - 3/3 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
-- Average duration: 6.5 min
-- Total execution time: ~1.8 hours
+- Total plans completed: 17
+- Average duration: 6.6 min
+- Total execution time: ~1.9 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: ██████░░░░ 66% (Phase 5 - 2/3 plans)
 | 02-rlm-engine-core | 4 | 29 min | 7.3 min |
 | 03-verification-loop | 3 | 30 min | 10 min |
 | 04-gsd-integration | 2 | 16 min | 8 min |
+| 05-optimization-polish | 3 | 28 min | 9.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 10, 12, 8, 8, 8 min
-- Trend: Stable (integration plans efficient)
+- Last 5 plans: 12, 8, 8, 8, 12 min
+- Trend: Stable (final phase complete)
 
 ## Accumulated Context
 
@@ -87,7 +88,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: Phase 5 Wave 1 complete (05-01, 05-02)
+Stopped at: MILESTONE 1 COMPLETE (all 5 phases done)
 Resume file: None
 
 ## Phase 3 Complete - Summary
@@ -330,7 +331,7 @@ Phase 5: Optimization & Polish - 3 plans in 2 waves:
 |------|------|-------------|--------------|--------|
 | 05-01 | 1 | Embedding cache layer with LRU | OPT-01 | COMPLETE |
 | 05-02 | 1 | Performance benchmarking suite | OPT-02 | COMPLETE |
-| 05-03 | 2 | Graceful degradation, latency verification, docs | OPT-03, OPT-04, QUA-02, QUA-03 | PENDING |
+| 05-03 | 2 | Graceful degradation, latency verification, docs | OPT-03, OPT-04, QUA-02, QUA-03 | COMPLETE |
 
 **Research insights applied:**
 - OPT-03 reframed as "graceful degradation" (FAISS skipped - Qdrant quantized matches performance)
@@ -384,3 +385,70 @@ Usage:
 - `npm run bench:ci` - JSON output for CI
 
 OPT-02 satisfied: Vitest bench suite measuring embedding and retrieval latency.
+
+### Plan 05-03 Complete - Summary
+
+Graceful degradation, latency verification, and documentation:
+
+| Module | Status | Key Exports |
+|--------|--------|-------------|
+| storage/qdrant-client | Updated | enableQuantization, QuantizationConfig, CollectionConfig |
+| retrieval/hybrid-search | Updated | hybridSearchWithWarning, HybridSearchResult |
+| integration/quick-retrieve | Updated | OnErrorCallback, enhanced graceful degradation |
+| docs/CONTRIBUTING.md | New | Comprehensive contributor guide |
+| benchmarks/retrieval.bench | Updated | Latency targets, baseline documentation |
+
+Key features:
+- Qdrant scalar quantization (int8, always_ram=true) for ~4x memory reduction
+- Graceful degradation - returns empty results with warning when Qdrant unavailable
+- onError callback for monitoring/alerting
+- Latency targets documented: <500ms for quickRetrieve (verified at ~133ms)
+- CONTRIBUTING.md with architecture, setup, testing, PR guidelines
+
+Requirements satisfied:
+- OPT-03: Graceful degradation when Qdrant unavailable
+- OPT-04: <500ms retrieval latency documented and verified
+- QUA-02: Retrieval precision trackable via benchmarks
+- QUA-03: CONTRIBUTING.md provides complete contributor guide
+
+## Phase 5 Complete - Summary
+
+All 3 plans in 2 waves completed:
+
+| Plan | Wave | Description | Requirements | Status |
+|------|------|-------------|--------------|--------|
+| 05-01 | 1 | Embedding cache layer with LRU | OPT-01 | COMPLETE |
+| 05-02 | 1 | Performance benchmarking suite | OPT-02 | COMPLETE |
+| 05-03 | 2 | Graceful degradation, latency verification, docs | OPT-03, OPT-04, QUA-02, QUA-03 | COMPLETE |
+
+All OPT and QUA requirements satisfied:
+- OPT-01: Embedding cache layer with LRU (lru-cache ^10.4.3)
+- OPT-02: Vitest bench suite for performance measurement
+- OPT-03: Graceful degradation when Qdrant unavailable
+- OPT-04: <500ms retrieval latency (verified at ~133ms)
+- QUA-02: Retrieval precision trackable via benchmarks
+- QUA-03: CONTRIBUTING.md documentation
+
+**Dependencies added in Phase 5:**
+- lru-cache@^10.4.3 (embedding cache with LRU eviction)
+
+## MILESTONE 1 COMPLETE
+
+All 5 phases complete:
+
+| Phase | Plans | Status | Key Deliverables |
+|-------|-------|--------|------------------|
+| 01-core-infrastructure | 5 | COMPLETE | Chunking, storage, embedding, retrieval, indexing |
+| 02-rlm-engine-core | 4 | COMPLETE | RLMEngine, dispatcher, evidence tracking |
+| 03-verification-loop | 3 | COMPLETE | Verifier, claims, checks (typecheck, test, impact) |
+| 04-gsd-integration | 2 | COMPLETE | quickRetrieve, CLI, install integration |
+| 05-optimization-polish | 3 | COMPLETE | Cache, benchmarks, graceful degradation, docs |
+
+Total: 17 plans executed in ~1.9 hours
+
+**All Requirements Satisfied:**
+- Local Index + Retrieval (P0)
+- RLM Core (P1)
+- Verification Loop (P2)
+- Optimization (P3)
+- Quality (QUA-02, QUA-03)
