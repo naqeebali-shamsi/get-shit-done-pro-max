@@ -5,15 +5,16 @@
  * Supports JavaScript and TypeScript parsing with grammar caching.
  */
 
-import Parser from 'web-tree-sitter';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { Parser, Language } from 'web-tree-sitter';
+import { join } from 'path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const GRAMMARS_DIR = join(__dirname, 'grammars');
+// Grammar files are located relative to this module
+// Use process.cwd() + configured path, or environment variable for flexibility
+const GRAMMARS_DIR = process.env.RLM_GRAMMARS_DIR
+  || join(process.cwd(), 'src', 'rlm', 'chunking', 'grammars');
 
 let initialized = false;
-const languageCache = new Map<string, Parser.Language>();
+const languageCache = new Map<string, Language>();
 
 /**
  * Initialize the Tree-sitter WASM runtime.
@@ -28,7 +29,7 @@ export async function initParser(): Promise<void> {
 /**
  * Load a language grammar, using cache if available.
  */
-export async function getLanguage(lang: 'javascript' | 'typescript'): Promise<Parser.Language> {
+export async function getLanguage(lang: 'javascript' | 'typescript'): Promise<Language> {
   if (!initialized) {
     await initParser();
   }
@@ -41,7 +42,7 @@ export async function getLanguage(lang: 'javascript' | 'typescript'): Promise<Pa
     : 'tree-sitter-typescript.wasm';
 
   const wasmPath = join(GRAMMARS_DIR, wasmFile);
-  const language = await Parser.Language.load(wasmPath);
+  const language = await Language.load(wasmPath);
   languageCache.set(lang, language);
 
   return language;
@@ -67,3 +68,6 @@ export function detectLanguage(filePath: string): 'javascript' | 'typescript' | 
   if (ext === 'ts' || ext === 'tsx' || ext === 'mts' || ext === 'cts') return 'typescript';
   return null;
 }
+
+// Re-export types for consumers
+export type { Parser, Language };

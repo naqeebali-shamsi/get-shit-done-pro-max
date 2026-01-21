@@ -5,7 +5,7 @@
  * class, and method boundaries with proper metadata.
  */
 
-import Parser from 'web-tree-sitter';
+import { Node } from 'web-tree-sitter';
 import { createHash } from 'crypto';
 import { createParser, detectLanguage } from './parser.js';
 import type { Chunk, ChunkMetadata } from '../types.js';
@@ -37,11 +37,11 @@ function mapNodeType(nodeType: string): ChunkMetadata['symbol_type'] {
 /**
  * Extract symbol name from AST node.
  */
-function extractSymbolName(node: Parser.SyntaxNode): string {
+function extractSymbolName(node: Node): string {
   // Try common patterns for finding the name
   const nameNode = node.childForFieldName('name')
-    || node.children.find(c => c.type === 'identifier')
-    || node.children.find(c => c.type === 'property_identifier');
+    || node.children.find((c: Node) => c.type === 'identifier')
+    || node.children.find((c: Node) => c.type === 'property_identifier');
 
   if (nameNode) return nameNode.text;
 
@@ -57,7 +57,7 @@ function extractSymbolName(node: Parser.SyntaxNode): string {
 /**
  * Check if node is at top level (direct child of program).
  */
-function isTopLevel(node: Parser.SyntaxNode): boolean {
+function isTopLevel(node: Node): boolean {
   return node.parent?.type === 'program' ||
          (node.parent?.type === 'export_statement' && node.parent.parent?.type === 'program');
 }
@@ -99,6 +99,11 @@ export async function chunkCode(
 
   const parser = await createParser(lang);
   const tree = parser.parse(sourceCode);
+
+  if (!tree) {
+    throw new Error(`Failed to parse file: ${filePath}`);
+  }
+
   const fileHash = createHash('sha256').update(sourceCode).digest('hex').slice(0, 16);
 
   const chunks: Chunk[] = [];
@@ -110,7 +115,7 @@ export async function chunkCode(
   }
 
   // Second pass: extract semantic chunks
-  walkTree(tree.rootNode, (node) => {
+  walkTree(tree.rootNode, (node: Node) => {
     if (!CHUNK_BOUNDARY_TYPES.has(node.type)) return;
     if (!isTopLevel(node) && node.type !== 'method_definition') return;
 
@@ -153,8 +158,8 @@ export async function chunkCode(
 /**
  * Collect import statements from AST.
  */
-function collectImports(node: Parser.SyntaxNode, imports: string[]): void {
-  walkTree(node, (n) => {
+function collectImports(node: Node, imports: string[]): void {
+  walkTree(node, (n: Node) => {
     if (n.type === 'import_statement' || n.type === 'import_declaration') {
       imports.push(n.text);
     }
@@ -164,7 +169,7 @@ function collectImports(node: Parser.SyntaxNode, imports: string[]): void {
 /**
  * Walk AST depth-first, calling callback on each node.
  */
-function walkTree(node: Parser.SyntaxNode, callback: (node: Parser.SyntaxNode) => void): void {
+function walkTree(node: Node, callback: (node: Node) => void): void {
   callback(node);
   for (const child of node.children) {
     walkTree(child, callback);
