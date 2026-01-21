@@ -6,9 +6,9 @@
  */
 
 import { z } from 'zod';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+import type { Tool } from 'ollama';
 
-// Tool parameter schemas using Zod
+// Tool parameter schemas using Zod (for validation)
 export const peekContextSchema = z.object({
   startLine: z.number().describe('Starting line number (0-indexed)'),
   endLine: z.number().describe('Ending line number (inclusive)'),
@@ -34,46 +34,112 @@ export const finalAnswerSchema = z.object({
   reasoning: z.string().optional().describe('Brief reasoning explanation'),
 });
 
-// Tool definitions for Ollama
-export const rlmTools = [
+// Tool definitions for Ollama (explicit typing for compatibility)
+export const rlmTools: Tool[] = [
   {
-    type: 'function' as const,
+    type: 'function',
     function: {
       name: 'peek_context',
       description: 'View lines from the retrieved context by line range',
-      parameters: zodToJsonSchema(peekContextSchema),
+      parameters: {
+        type: 'object',
+        required: ['startLine', 'endLine'],
+        properties: {
+          startLine: {
+            type: 'number',
+            description: 'Starting line number (0-indexed)',
+          },
+          endLine: {
+            type: 'number',
+            description: 'Ending line number (inclusive)',
+          },
+        },
+      },
     },
   },
   {
-    type: 'function' as const,
+    type: 'function',
     function: {
       name: 'search_context',
       description: 'Search the context for a pattern, returns matching lines with chunk IDs',
-      parameters: zodToJsonSchema(searchContextSchema),
+      parameters: {
+        type: 'object',
+        required: ['pattern'],
+        properties: {
+          pattern: {
+            type: 'string',
+            description: 'Search pattern (regex supported)',
+          },
+        },
+      },
     },
   },
   {
-    type: 'function' as const,
+    type: 'function',
     function: {
       name: 'get_chunk',
       description: 'Get the full content of a specific chunk by ID',
-      parameters: zodToJsonSchema(getChunkSchema),
+      parameters: {
+        type: 'object',
+        required: ['chunkId'],
+        properties: {
+          chunkId: {
+            type: 'string',
+            description: 'ID of chunk to retrieve',
+          },
+        },
+      },
     },
   },
   {
-    type: 'function' as const,
+    type: 'function',
     function: {
       name: 'sub_query',
       description: 'Ask a sub-question about a specific chunk (triggers recursion)',
-      parameters: zodToJsonSchema(subQuerySchema),
+      parameters: {
+        type: 'object',
+        required: ['chunkId', 'question'],
+        properties: {
+          chunkId: {
+            type: 'string',
+            description: 'ID of chunk to query about',
+          },
+          question: {
+            type: 'string',
+            description: 'Specific question about this chunk',
+          },
+        },
+      },
     },
   },
   {
-    type: 'function' as const,
+    type: 'function',
     function: {
       name: 'final_answer',
       description: 'Provide the final answer with evidence citations',
-      parameters: zodToJsonSchema(finalAnswerSchema),
+      parameters: {
+        type: 'object',
+        required: ['answer', 'evidence', 'confidence'],
+        properties: {
+          answer: {
+            type: 'string',
+            description: 'The final answer to the query',
+          },
+          evidence: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Chunk IDs that support the answer',
+          },
+          confidence: {
+            type: 'number',
+            description: 'Confidence score 0-1',
+          },
+          reasoning: {
+            type: 'string',
+            description: 'Brief reasoning explanation',
+          },
+        },
+      },
     },
   },
 ];
