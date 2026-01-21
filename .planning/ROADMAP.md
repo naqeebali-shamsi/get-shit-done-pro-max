@@ -57,7 +57,7 @@ None (custom system, patterns from research)
 **Requirements**: VER-01, VER-02, VER-03
 **Research**: Likely (evidence extraction algorithms)
 **Research topics**: Claim segmentation, confidence scoring algorithms
-**Plans**: TBD
+**Plans**: 3 (03-01 to 03-03)
 
 ### Phase 4: GSD Integration
 **Goal**: Wire RLM into existing /gsd commands transparently
@@ -82,7 +82,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Core Infrastructure | 5/5 | ✓ Complete | 2026-01-21 |
 | 2. RLM Engine Core | 4/4 | ✓ Complete | 2026-01-21 |
-| 3. Verification Loop | 0/TBD | Not started | - |
+| 3. Verification Loop | 0/3 | Planned | - |
 | 4. GSD Integration | 0/TBD | Not started | - |
 | 5. Optimization & Polish | 0/TBD | Not started | - |
 

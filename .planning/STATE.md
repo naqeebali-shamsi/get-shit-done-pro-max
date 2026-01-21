@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 2 COMPLETE - All RLM requirements (RLM-01 to RLM-05) satisfied
+**Current focus:** Phase 3 PLANNED - Ready for execution (VER-01, VER-02, VER-03)
 
 ## Current Position
 
-Phase: 2 of 5 (RLM Engine Core) - COMPLETE
-Plan: All 4 plans complete (02-01, 02-02, 02-03, 02-04)
-Status: RLMDispatcher ready for GSD integration
-Last activity: 2026-01-21 - Plan 02-04 executed
+Phase: 3 of 5 (Verification Loop) - PLANNED
+Plan: 3 plans created (03-01, 03-02, 03-03)
+Status: Ready for execution via /gsd:execute-phase 3
+Last activity: 2026-01-21 - Phase 3 plans created
 
-Progress: ██████████ 100% (Phase 2)
+Progress: ░░░░░░░░░░ 0% (Phase 3)
 
 ## Performance Metrics
 
@@ -83,8 +83,32 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Phase 2 complete, ready for Phase 3
+Stopped at: Phase 3 planned, ready for execution
 Resume file: None
+
+## Phase 3 Plans - Summary
+
+3 plans in 3 waves:
+
+| Plan | Wave | Description | Requirements | Status |
+|------|------|-------------|--------------|--------|
+| 03-01 | 1 | Verification types and NLP claim extraction | VER-02 foundation | PLANNED |
+| 03-02 | 2 | Check implementations (typecheck, test, impact) | VER-01 | PLANNED |
+| 03-03 | 3 | Verifier class and dispatcher integration | VER-02, VER-03 | PLANNED |
+
+**Dependencies:**
+- 03-01: No dependencies (Wave 1)
+- 03-02: Depends on 03-01 (types)
+- 03-03: Depends on 03-02 (checks)
+
+**New dependencies to install:**
+- compromise (NLP sentence segmentation)
+- ts-morph (TypeScript AST analysis)
+
+**Key patterns:**
+- FIRE-style iterative verification with confidence-based stopping
+- Claimify atomic claim decomposition
+- Programmatic APIs (ts-morph, Vitest Node API) instead of shell parsing
 
 ## Phase 2 Complete - Summary
 
