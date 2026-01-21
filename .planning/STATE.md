@@ -5,32 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 2 planned — Ready for execution (RLM Engine Core)
+**Current focus:** Phase 2 in progress — Plan 02-01 complete (RLM Engine Core)
 
 ## Current Position
 
-Phase: 2 of 5 (RLM Engine Core) - PLANNED
-Plan: 4 plans created (02-01 to 02-04)
-Status: Ready for execution
-Last activity: 2026-01-21 — Phase 2 plans created
+Phase: 2 of 5 (RLM Engine Core) - IN PROGRESS
+Plan: 02-01 complete, 02-02/02-03/02-04 pending
+Status: Plan 02-01 complete - types and state management done
+Last activity: 2026-01-21 — Plan 02-01 executed
 
-Progress: ██████████ 100% (Phase 1)
+Progress: ██░░░░░░░░ 25% (Phase 2)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 6.4 min
-- Total execution time: 0.53 hours
+- Total plans completed: 6
+- Average duration: 6.2 min
+- Total execution time: 0.62 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-core-infrastructure | 5 | 32 min | 6.4 min |
+| 02-rlm-engine-core | 1 | 5 min | 5.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 8, 5, 6, 5, 8 min
+- Last 5 plans: 5, 6, 5, 8, 5 min
 - Trend: Steady (parallel execution)
 
 ## Accumulated Context
@@ -44,6 +45,9 @@ Recent decisions affecting current work:
 - WASM files copied at install time, not committed to git
 - nomic-embed-text as default embedding model
 - RRF fusion for hybrid search (dense + sparse vectors)
+- REPL-style state: context stored externally, LLM inspects via tools
+- llama3.1:8b as default model with 16K token budget
+- Max recursion depth of 5 (configurable via RLMEngineConfig)
 
 ### Content Workflow
 
@@ -77,20 +81,38 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-21
-Stopped at: Phase 2 plans created, ready for execution
+Stopped at: Plan 02-01 complete, ready for 02-02/02-03
 Resume file: None
 
 ## Phase 2 Plan Overview
 
 4 plans in 3 waves:
 
-| Plan | Wave | Description | Requirements |
-|------|------|-------------|--------------|
-| 02-01 | 1 | RLM types and state management | RLM-01, RLM-05 foundation |
-| 02-02 | 2 | RLMEngine with query/recurse | RLM-01, RLM-05 |
-| 02-03 | 2 | Evidence tracker and confidence | RLM-03, RLM-04 |
-| 02-04 | 3 | Dispatcher pipeline integration | RLM-02 |
+| Plan | Wave | Description | Requirements | Status |
+|------|------|-------------|--------------|--------|
+| 02-01 | 1 | RLM types and state management | RLM-01, RLM-05 foundation | COMPLETE |
+| 02-02 | 2 | RLMEngine with query/recurse | RLM-01, RLM-05 | Pending |
+| 02-03 | 2 | Evidence tracker and confidence | RLM-03, RLM-04 | Pending |
+| 02-04 | 3 | Dispatcher pipeline integration | RLM-02 | Pending |
 
 Dependencies:
-- 02-01 → 02-02, 02-03 (types/state foundation)
+- 02-01 → 02-02, 02-03 (types/state foundation) **UNBLOCKED**
 - 02-02, 02-03 → 02-04 (dispatcher needs engine + evidence)
+
+### Plan 02-01 Complete - Summary
+
+Engine types and REPL-style state management:
+
+| Module | Status | Key Exports |
+|--------|--------|-------------|
+| engine/types | Done | Evidence, RLMResult, RLMEngineConfig, ToolCall, FinalAnswer, ContextChunk |
+| engine/state | Done | RLMState class with variable storage, context inspection, recursion tracking |
+
+Key methods in RLMState:
+- `initialize(query, chunks, scores)` - Set up execution state
+- `getContextSummary()` - Summary for prompt (not full text)
+- `searchContext(pattern)` / `getContextLines()` / `getChunk()` - Tool inspection
+- `canRecurse()` - Check depth/token limits
+- `set/getVariable()` - REPL-style storage
+
+All exports available from `src/rlm/engine/index.ts` and main `src/rlm/index.ts`.
