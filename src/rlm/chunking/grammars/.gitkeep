@@ -1,0 +1,2 @@
+# Tree-sitter grammar WASM files are copied from node_modules at install time.
+# Run `npm run postinstall:rlm` to regenerate.

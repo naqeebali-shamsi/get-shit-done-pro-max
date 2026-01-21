@@ -8,3 +8,9 @@ CLAUDE.md
 
 # Local test installs
 .claude/
+
+# RLM - Tree-sitter WASM grammars (generated from node_modules)
+src/rlm/chunking/grammars/*.wasm
+
+# RLM - Compiled TypeScript output
+dist/
