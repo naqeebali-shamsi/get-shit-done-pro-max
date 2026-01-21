@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** Phase 4 in progress - GSD Integration (Plan 04-02 complete)
+**Current focus:** Phase 4 COMPLETE - GSD Integration complete (VER-04)
 
 ## Current Position
 
-Phase: 4 of 5 (GSD Integration)
+Phase: 4 of 5 (GSD Integration) - COMPLETE
 Plan: 04-02 complete
-Status: Plan 04-02 complete, ready for Plan 04-03
-Last activity: 2026-01-22 - Plan 04-02 executed
+Status: Phase 4 complete, ready for Phase 5
+Last activity: 2026-01-22 - Phase 4 executed
 
-Progress: ██████░░░░ 66% (Phase 4 - 2/3 plans estimated)
+Progress: ██████████ 100% (Phase 4 - 2/2 plans)
 
 ## Performance Metrics
 
@@ -266,7 +266,22 @@ All Phase 2 exports available from `src/rlm/index.ts`:
 - EvidenceTracker, generateConfidenceReport
 - All Phase 1 modules (hybridSearch, indexDirectory, etc.)
 
-## Phase 4 In Progress - Summary
+## Phase 4 Complete - Summary
+
+All 2 plans in 2 waves completed:
+
+| Plan | Wave | Description | Requirements | Status |
+|------|------|-------------|--------------|--------|
+| 04-01 | 1 | Quick retrieval and context formatting | VER-04 foundation | COMPLETE |
+| 04-02 | 2 | RLM CLI and install integration | VER-04 | COMPLETE |
+
+VER-04 satisfied: Integration with existing /gsd commands via:
+- quickRetrieve() for fast semantic search
+- formatChunksAsContext() for readable context
+- RLM CLI for validation
+- Install integration for distribution
+
+### Plan 04-01 Complete - Summary
 
 Plan 04-01 complete (Quick Retrieval and Context Formatting):
 
@@ -307,7 +322,10 @@ Files modified:
 - package.json (bin entry, files array)
 - bin/install.js (copyDir, RLM copy logic)
 
-## Next Steps
+## Next Phase
 
-Phase 4 continues:
-- Plan 04-03: Full hook integration with GSD commands
+Phase 5: Optimization & Polish
+- OPT-01: Embedding cache layer
+- OPT-02: Performance benchmarking suite
+- OPT-03: FAISS embedded fallback
+- OPT-04: Latency target <500ms
