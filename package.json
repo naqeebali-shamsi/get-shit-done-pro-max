@@ -4,7 +4,8 @@
   "description": "A meta-prompting, context engineering and spec-driven development system for Claude Code by TACHES.",
   "bin": {
     "get-shit-done-cc": "bin/install.js",
-    "rlm": "dist/rlm/cli/rlm-cli.js"
+    "rlm": "dist/rlm/cli/rlm-cli.js",
+    "rlm-mcp": "dist/rlm/mcp/server.js"
   },
   "files": [
     "bin",
@@ -39,7 +40,9 @@
     "node": ">=16.7.0"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.3",
     "@qdrant/js-client-rest": "^1.16.2",
+    "@toon-format/toon": "^2.1.0",
     "compromise": "^14.14.3",
     "fast-glob": "^3.3.3",
     "lru-cache": "^10.4.3",
