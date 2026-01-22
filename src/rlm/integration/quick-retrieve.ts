@@ -109,20 +109,29 @@ export async function quickRetrieve(
   }
 
   try {
+    // Track timeout for cleanup
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let timedOut = false;
+
     // Create timeout promise
     const timeoutPromise = new Promise<Chunk[]>((resolve) => {
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
+        timedOut = true;
         console.warn(`[quickRetrieve] Search timeout (${opts.timeout}ms) - returning empty results`);
         resolve([]);
       }, opts.timeout);
     });
 
-    // Create search promise
+    // Create search promise that clears timeout on success
     const searchPromise = (async (): Promise<Chunk[]> => {
       const results = await hybridSearch(client, collectionName, query, {
         limit: opts.limit,
         scoreThreshold: opts.scoreThreshold,
       });
+      // Clear timeout if search succeeded first
+      if (timeoutId && !timedOut) {
+        clearTimeout(timeoutId);
+      }
       return results.map(r => r.chunk);
     })();
 

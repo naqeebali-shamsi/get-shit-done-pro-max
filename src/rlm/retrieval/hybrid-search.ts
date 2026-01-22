@@ -33,12 +33,14 @@ export interface SearchFilters {
   file_hash?: string;
 }
 
-const DEFAULT_OPTIONS: SearchOptions = {
+const DEFAULT_OPTIONS = {
   limit: 10,
   scoreThreshold: 0.0,
   useHybrid: true,
   timeout: 5000,  // 5 second default
-};
+} as const;
+
+type ResolvedOptions = Required<Omit<SearchOptions, 'filters'>> & Pick<SearchOptions, 'filters'>;
 
 /**
  * Perform hybrid search using RRF fusion on dense and sparse vectors.
@@ -76,7 +78,7 @@ export async function hybridSearchWithWarning(
   query: string,
   options: SearchOptions = {}
 ): Promise<HybridSearchResult> {
-  const opts = { ...DEFAULT_OPTIONS, ...options };
+  const opts: ResolvedOptions = { ...DEFAULT_OPTIONS, ...options };
 
   try {
     // Create timeout promise
@@ -120,7 +122,7 @@ async function performSearch(
   client: QdrantClient,
   collectionName: string,
   query: string,
-  opts: SearchOptions & typeof DEFAULT_OPTIONS
+  opts: ResolvedOptions
 ): Promise<HybridSearchResult> {
   // Generate dense embedding for query
   const denseVector = await embedText(query);

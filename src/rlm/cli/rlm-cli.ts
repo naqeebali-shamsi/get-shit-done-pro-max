@@ -77,6 +77,7 @@ async function runQuery(queryText: string): Promise<void> {
   try {
     const chunks = await quickRetrieve(queryText, {
       limit: 10,
+      timeout: 10000,  // 10s for CLI (allows embedding + search)
     });
 
     if (chunks.length === 0) {

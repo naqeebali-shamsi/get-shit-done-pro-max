@@ -52,6 +52,10 @@ export async function getLanguage(lang: 'javascript' | 'typescript'): Promise<La
  * Create a parser configured for the specified language.
  */
 export async function createParser(lang: 'javascript' | 'typescript'): Promise<Parser> {
+  // Ensure init is called before creating Parser instance
+  if (!initialized) {
+    await initParser();
+  }
   const parser = new Parser();
   const language = await getLanguage(lang);
   parser.setLanguage(language);

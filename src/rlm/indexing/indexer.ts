@@ -6,9 +6,10 @@
  */
 
 import { QdrantClient } from '@qdrant/js-client-rest';
-import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, relative } from 'path';
+import { readFileSync } from 'fs';
+import { resolve, relative } from 'path';
 import { createHash } from 'crypto';
+import fg from 'fast-glob';
 
 import type { Chunk } from '../types.js';
 import { chunkCode, detectLanguage } from '../chunking/index.js';
@@ -57,7 +58,7 @@ export async function indexDirectory(
   // Ensure collection exists
   await ensureCollection(client, collectionName);
 
-  const files = collectFiles(directoryPath, opts);
+  const files = await collectFiles(directoryPath, opts);
   let indexed = 0;
   let skipped = 0;
   const errors: string[] = [];
@@ -205,65 +206,20 @@ export async function indexSingleFile(
 }
 
 /**
- * Collect all files matching the include/exclude patterns.
+ * Collect all files matching the include/exclude patterns using fast-glob.
  */
-function collectFiles(dir: string, opts: IndexOptions): string[] {
-  const files: string[] = [];
+async function collectFiles(dir: string, opts: IndexOptions): Promise<string[]> {
+  const absoluteDir = resolve(dir);
 
-  function walk(currentDir: string) {
-    const entries = readdirSync(currentDir);
+  const files = await fg(opts.includePatterns || [], {
+    cwd: absoluteDir,
+    ignore: opts.excludePatterns || [],
+    absolute: true,
+    onlyFiles: true,
+    dot: false,
+  });
 
-    for (const entry of entries) {
-      const fullPath = join(currentDir, entry);
-      const stat = statSync(fullPath);
-
-      // Check exclude patterns
-      if (matchesAny(fullPath, opts.excludePatterns || [])) {
-        continue;
-      }
-
-      if (stat.isDirectory()) {
-        walk(fullPath);
-      } else if (stat.isFile()) {
-        // Check include patterns
-        if (matchesAny(fullPath, opts.includePatterns || [])) {
-          files.push(fullPath);
-        }
-      }
-    }
-  }
-
-  walk(dir);
   return files;
-}
-
-/**
- * Check if a path matches any of the given glob patterns.
- */
-function matchesAny(path: string, patterns: string[]): boolean {
-  // Normalize path separators for cross-platform compatibility
-  const normalizedPath = path.replace(/\\/g, '/');
-
-  for (const pattern of patterns) {
-    if (pattern.includes('**')) {
-      // ** matches any path segment
-      const regex = new RegExp(
-        pattern
-          .replace(/\*\*/g, '.*')
-          .replace(/\*/g, '[^/]*')
-          .replace(/\./g, '\\.')
-      );
-      if (regex.test(normalizedPath)) return true;
-    } else if (pattern.includes('*')) {
-      const regex = new RegExp(
-        pattern.replace(/\*/g, '[^/]*').replace(/\./g, '\\.')
-      );
-      if (regex.test(normalizedPath)) return true;
-    } else if (normalizedPath.includes(pattern)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 /**
