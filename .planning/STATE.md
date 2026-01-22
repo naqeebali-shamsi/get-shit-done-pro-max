@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** v1.1 MCP Server — Phase 6 (MCP Server Foundation)
+**Current focus:** v1.1 MCP Server — Phase 7 (Test Coverage)
 
 ## Current Position
 
-Phase: 6 of 8 (MCP Server Foundation)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-01-22 — Completed 06-01-PLAN.md (MCP Server Core)
+Phase: 6 of 8 (MCP Server Foundation) - COMPLETE
+Plan: 2 of 2 complete
+Status: Phase complete
+Last activity: 2026-01-23 — Completed 06-02-PLAN.md (TOON Search Results)
 
-Progress: [█████████████░░░░░░░] 67% (18/27 total plans across all phases)
+Progress: [██████████████░░░░░░] 70% (19/27 total plans across all phases)
 
 ## Performance Metrics
 
@@ -25,8 +25,8 @@ Progress: [█████████████░░░░░░░] 67% (18
 - Retrieval latency: ~133ms (target <500ms)
 
 **v1.1 MCP Server (in progress):**
-- Plans completed: 1
-- Phase 6 progress: 1/2 plans
+- Plans completed: 2
+- Phase 6 progress: 2/2 plans (COMPLETE)
 
 **By Phase:**
 
@@ -37,7 +37,7 @@ Progress: [█████████████░░░░░░░] 67% (18
 | 03-verification-loop | 3 | 30 min | 10 min |
 | 04-gsd-integration | 2 | 16 min | 8 min |
 | 05-optimization-polish | 3 | 28 min | 9.3 min |
-| 06-mcp-server-foundation | 1/2 | 6 min | 6 min |
+| 06-mcp-server-foundation | 2/2 | 10 min | 5 min |
 
 ## Accumulated Context
 
@@ -55,10 +55,11 @@ Major v1.0 decisions:
 - Graceful degradation over FAISS fallback
 - zod@3.x (v4 incompatible with zod-to-json-schema)
 
-v1.1 decisions (06-01):
+v1.1 decisions (Phase 6):
 - @modelcontextprotocol/sdk@^1.25.3 for MCP server
 - stderr-only logging (stdout reserved for JSON-RPC)
 - zod schemas for tool input validation
+- TOON encoding for search results (30-60% token savings)
 
 ### Content Workflow
 
@@ -75,8 +76,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-22
-Stopped at: Completed 06-01-PLAN.md
+Last session: 2026-01-23
+Stopped at: Completed 06-02-PLAN.md (Phase 6 complete)
 Resume file: None
 
 ## v1.1 MCP Server Milestone
@@ -84,7 +85,7 @@ Resume file: None
 **Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration with production-quality test coverage.
 
 **Phases:**
-- Phase 6: MCP Server Foundation (11 requirements) — Plan 01 complete, Plan 02 ready
+- Phase 6: MCP Server Foundation (11 requirements) — COMPLETE
 - Phase 7: Test Coverage (4 requirements) — Not started
 - Phase 8: Documentation & Integration (4 requirements) — Not started
 
@@ -92,5 +93,11 @@ Resume file: None
 - @modelcontextprotocol/sdk@^1.25.3 (installed)
 - @toon-format/toon@^2.1.0 (installed)
 
+**Phase 6 Deliverables:**
+- MCP server with stdio transport (server.ts)
+- Three MCP tools: search_code, index_code, get_status
+- TOON formatter for token-optimized search results
+- Stderr-only logging (stdout reserved for JSON-RPC)
+
 ---
-*Last updated: 2026-01-22 — Completed 06-01-PLAN.md*
+*Last updated: 2026-01-23 — Completed 06-02-PLAN.md (Phase 6 complete)*
