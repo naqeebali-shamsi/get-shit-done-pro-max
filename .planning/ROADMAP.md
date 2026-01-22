@@ -19,7 +19,8 @@ None (custom system, patterns from research)
 
 ## Milestones
 
-- [v1.0 MVP](milestones/v1.0-ROADMAP.md) (Phases 1-5) — SHIPPED 2026-01-22
+- ✅ **v1.0 MVP** (Phases 1-5) — SHIPPED 2026-01-22
+- 🚧 **v1.1 MCP Server** (Phases 6-8) — In Progress
 
 ## Phases
 
@@ -28,7 +29,7 @@ None (custom system, patterns from research)
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 <details>
-<summary>v1.0 MVP (Phases 1-5) — SHIPPED 2026-01-22</summary>
+<summary>✅ v1.0 MVP (Phases 1-5) — SHIPPED 2026-01-22</summary>
 
 - [x] **Phase 1: Core Infrastructure** — AST-aware indexing pipeline and Qdrant vector storage
 - [x] **Phase 2: RLM Engine Core** — REPL environment with query/recurse methods
@@ -38,10 +39,65 @@ None (custom system, patterns from research)
 
 </details>
 
+### 🚧 v1.1 MCP Server (In Progress)
+
+**Milestone Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration with production-quality test coverage.
+
+- [ ] **Phase 6: MCP Server Foundation** — Protocol implementation with TOON-formatted tools
+- [ ] **Phase 7: Test Coverage** — 85% coverage with unit, integration, and E2E tests
+- [ ] **Phase 8: Documentation & Integration** — Setup guides and Claude Desktop configuration
+
+## Phase Details
+
+### Phase 6: MCP Server Foundation
+**Goal**: Claude Desktop can discover and call RLM tools via MCP protocol with token-optimized responses
+**Depends on**: Phase 5 (v1.0 complete)
+**Requirements**: MCP-01, MCP-02, MCP-03, MCP-04, MCP-05, MCP-06, MCP-07, MCP-08, INT-02, INT-03, INT-04
+**Success Criteria** (what must be TRUE):
+  1. MCP server starts via `rlm-mcp` command and communicates over stdio using JSON-RPC
+  2. Claude Desktop can call search_code tool and receive TOON-formatted results
+  3. Claude Desktop can call index_code tool and receive confirmation of indexed files
+  4. Claude Desktop can call get_status tool and receive collection statistics
+  5. Server logs errors to stderr without polluting stdout JSON-RPC stream
+**Plans**: 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — MCP server core with stdio transport and three tools (search_code, index_code, get_status)
+- [ ] 06-02-PLAN.md — TOON formatting for search results and end-to-end verification
+
+### Phase 7: Test Coverage
+**Goal**: RLM codebase has 85% test coverage with comprehensive test suite
+**Depends on**: Phase 6
+**Requirements**: TST-01, TST-02, TST-03, TST-04
+**Success Criteria** (what must be TRUE):
+  1. Overall test coverage reaches 85% on src/rlm/ modules
+  2. All MCP tool handlers have unit tests verifying input validation and error handling
+  3. Integration tests verify JSON-RPC protocol compliance (request/response format)
+  4. End-to-end test spawns MCP server and successfully executes all three tools
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: TBD
+- [ ] 07-02: TBD
+
+### Phase 8: Documentation & Integration
+**Goal**: Users can configure Claude Desktop to use RLM MCP server without external help
+**Depends on**: Phase 7
+**Requirements**: DOC-01, DOC-02, DOC-03, INT-01
+**Success Criteria** (what must be TRUE):
+  1. README includes step-by-step Claude Desktop setup instructions with configuration template
+  2. Each MCP tool has documented usage examples showing input/output
+  3. Troubleshooting guide covers common issues: Qdrant unavailable, Ollama missing, collection not found
+  4. Users can copy claude_desktop_config.json template and start using RLM tools immediately
+**Plans**: TBD
+
+Plans:
+- [ ] 08-01: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -50,7 +106,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Verification Loop | v1.0 | 3/3 | Complete | 2026-01-21 |
 | 4. GSD Integration | v1.0 | 2/2 | Complete | 2026-01-22 |
 | 5. Optimization & Polish | v1.0 | 3/3 | Complete | 2026-01-22 |
+| 6. MCP Server Foundation | v1.1 | 0/2 | Planned | - |
+| 7. Test Coverage | v1.1 | 0/TBD | Not started | - |
+| 8. Documentation & Integration | v1.1 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-21*
-*Last updated: 2026-01-22 — v1.0 MVP milestone archived*
+*Last updated: 2026-01-22 — Phase 6 plans created*
