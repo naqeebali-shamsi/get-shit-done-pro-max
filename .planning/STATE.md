@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** v1.1 MCP Server — defining requirements
+**Current focus:** v1.1 MCP Server — Phase 6 (MCP Server Foundation)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-01-22 — Milestone v1.1 started
+Phase: 6 of 8 (MCP Server Foundation)
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-22 — Completed 06-01-PLAN.md (MCP Server Core)
 
-Progress: Defining v1.1 requirements
+Progress: [█████████████░░░░░░░] 67% (18/27 total plans across all phases)
 
 ## Performance Metrics
 
@@ -23,6 +23,10 @@ Progress: Defining v1.1 requirements
 - Average duration: 6.6 min per plan
 - Total execution time: ~1.9 hours
 - Retrieval latency: ~133ms (target <500ms)
+
+**v1.1 MCP Server (in progress):**
+- Plans completed: 1
+- Phase 6 progress: 1/2 plans
 
 **By Phase:**
 
@@ -33,6 +37,7 @@ Progress: Defining v1.1 requirements
 | 03-verification-loop | 3 | 30 min | 10 min |
 | 04-gsd-integration | 2 | 16 min | 8 min |
 | 05-optimization-polish | 3 | 28 min | 9.3 min |
+| 06-mcp-server-foundation | 1/2 | 6 min | 6 min |
 
 ## Accumulated Context
 
@@ -50,6 +55,11 @@ Major v1.0 decisions:
 - Graceful degradation over FAISS fallback
 - zod@3.x (v4 incompatible with zod-to-json-schema)
 
+v1.1 decisions (06-01):
+- @modelcontextprotocol/sdk@^1.25.3 for MCP server
+- stderr-only logging (stdout reserved for JSON-RPC)
+- zod schemas for tool input validation
+
 ### Content Workflow
 
 Parallel workflow: After each milestone, write article for Medium/LinkedIn/dev.to.
@@ -66,36 +76,21 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-22
-Stopped at: v1.0 milestone complete and archived
+Stopped at: Completed 06-01-PLAN.md
 Resume file: None
 
-## v1.0 MVP Summary
+## v1.1 MCP Server Milestone
 
-All 5 phases complete with 17 plans:
+**Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration with production-quality test coverage.
 
-| Phase | Plans | Status | Key Deliverables |
-|-------|-------|--------|------------------|
-| 01-core-infrastructure | 5 | COMPLETE | Chunking, storage, embedding, retrieval, indexing |
-| 02-rlm-engine-core | 4 | COMPLETE | RLMEngine, dispatcher, evidence tracking |
-| 03-verification-loop | 3 | COMPLETE | Verifier, claims, checks (typecheck, test, impact) |
-| 04-gsd-integration | 2 | COMPLETE | quickRetrieve, CLI, install integration |
-| 05-optimization-polish | 3 | COMPLETE | Cache, benchmarks, graceful degradation, docs |
+**Phases:**
+- Phase 6: MCP Server Foundation (11 requirements) — Plan 01 complete, Plan 02 ready
+- Phase 7: Test Coverage (4 requirements) — Not started
+- Phase 8: Documentation & Integration (4 requirements) — Not started
 
-**Stats:**
-- 40 TypeScript files
-- 5,520 lines of code
-- 85 commits
-- 2 days (2026-01-21 to 2026-01-22)
-
-**Git tag:** v1.0
+**Dependencies:**
+- @modelcontextprotocol/sdk@^1.25.3 (installed)
+- @toon-format/toon@^2.1.0 (installed)
 
 ---
-
-## Current Milestone: v1.1 MCP Server
-
-**Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration, with production-quality test coverage.
-
-**Target features:**
-- MCP server exposing RLM tools (search, index, status)
-- Claude Desktop configuration and documentation
-- 85% test coverage on all RLM modules
+*Last updated: 2026-01-22 — Completed 06-01-PLAN.md*
