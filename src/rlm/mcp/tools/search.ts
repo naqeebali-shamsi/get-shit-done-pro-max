@@ -9,6 +9,7 @@ import { z } from "zod";
 import { createQdrantClient } from '../../storage/index.js';
 import { hybridSearch } from '../../retrieval/hybrid-search.js';
 import { logInfo, logError } from '../logger.js';
+import { formatSearchResultsTOON } from '../formatters/toon-formatter.js';
 
 const COLLECTION_NAME = process.env.RLM_COLLECTION || 'rlm_chunks';
 
@@ -48,12 +49,8 @@ export function registerSearchTool(server: McpServer): void {
           };
         }
 
-        // Format results as structured text (TOON formatting added in Plan 02)
-        const formatted = results.map((r, i) => {
-          const { path, start_line, end_line } = r.chunk.metadata;
-          const score = Math.round(r.score * 100);
-          return `## Result ${i + 1} (${score}% relevance)\nFile: ${path}\nLines: ${start_line}-${end_line}\n\n\`\`\`\n${r.chunk.text}\n\`\`\``;
-        }).join('\n\n---\n\n');
+        // Format results as TOON for token-efficient LLM consumption
+        const formatted = formatSearchResultsTOON(results);
 
         logInfo('search_code success', { query, results: results.length });
 
