@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** v1.0 MVP shipped — planning next milestone
+**Current focus:** v1.1 MCP Server — defining requirements
 
 ## Current Position
 
-Phase: v1.0 complete (5 phases, 17 plans)
-Plan: All complete
-Status: MILESTONE SHIPPED
-Last activity: 2026-01-22 — v1.0 MVP milestone archived
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-22 — Milestone v1.1 started
 
-Progress: All v1.0 work complete
+Progress: Defining v1.1 requirements
 
 ## Performance Metrics
 
@@ -91,9 +91,11 @@ All 5 phases complete with 17 plans:
 
 ---
 
-## Next Milestone
+## Current Milestone: v1.1 MCP Server
 
-To be determined. Options:
-- v1.1: Full /gsd command integration + test coverage
-- v2.0: MCP server for Claude Desktop
-- Other: Multi-repo support, advanced tool augmentation
+**Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration, with production-quality test coverage.
+
+**Target features:**
+- MCP server exposing RLM tools (search, index, status)
+- Claude Desktop configuration and documentation
+- 85% test coverage on all RLM modules

@@ -8,6 +8,15 @@ A Recursive Language Model (RLM) system embedded inside GSD that enables large-c
 
 **Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.**
 
+## Current Milestone: v1.1 MCP Server
+
+**Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration, with production-quality test coverage.
+
+**Target features:**
+- MCP server exposing RLM tools (search, index, status)
+- Claude Desktop configuration and documentation
+- 85% test coverage on all RLM modules
+
 ## Current State
 
 **v1.0 MVP shipped 2026-01-22**
@@ -45,10 +54,10 @@ A Recursive Language Model (RLM) system embedded inside GSD that enables large-c
 
 ### Active
 
-- [ ] Integration with existing /gsd commands (/gsd:map-codebase, /gsd:plan-phase, /gsd:execute-phase)
-- [ ] 85% test coverage on new modules
-- [ ] MCP server for Claude Desktop integration
-- [ ] Multi-repo support with cross-repository search
+- [ ] MCP server for Claude Desktop integration (v1.1)
+- [ ] 85% test coverage on RLM modules (v1.1)
+- [ ] Integration with existing /gsd commands (/gsd:map-codebase, /gsd:plan-phase, /gsd:execute-phase) (v1.2+)
+- [ ] Multi-repo support with cross-repository search (v2.0+)
 
 ### Out of Scope
 
@@ -122,4 +131,4 @@ The content series tells the story of building an RLM system from scratch, posit
 **v1.0 Article:** Ready to write about building a local-first RLM system with AST-aware chunking and verification-driven recursion.
 
 ---
-*Last updated: 2026-01-22 after v1.0 milestone*
+*Last updated: 2026-01-22 after starting v1.1 milestone*
