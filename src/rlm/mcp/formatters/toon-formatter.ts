@@ -40,8 +40,9 @@ export function formatSearchResultsTOON(results: SearchResult[]): string {
   }));
 
   // TOON encode with minimal formatting for LLM consumption
+  // Note: indent must be a multiple of 2 for valid TOON
   return encode({ results: formatted }, {
-    indent: 1,        // Minimal indentation
+    indent: 2,        // Minimal valid indentation (must be multiple of 2)
     delimiter: ',',   // Comma delimiter for readability
   });
 }
