@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 7 of 8 (Test Coverage) - In progress
-Plan: 2 of 4 complete
+Plan: 3 of 4 complete
 Status: In progress
-Last activity: 2026-01-23 — Completed 07-02-PLAN.md (MCP Tool Unit Tests)
+Last activity: 2026-01-23 — Completed 07-03-PLAN.md (Integration Tests)
 
-Progress: [███████████████░░░░░] 74% (20/27 total plans across all phases)
+Progress: [████████████████░░░░] 78% (21/27 total plans across all phases)
 
 ## Performance Metrics
 
@@ -25,9 +25,9 @@ Progress: [███████████████░░░░░] 74% (20
 - Retrieval latency: ~133ms (target <500ms)
 
 **v1.1 MCP Server (in progress):**
-- Plans completed: 4
+- Plans completed: 5
 - Phase 6 progress: 2/2 plans (COMPLETE)
-- Phase 7 progress: 2/4 plans
+- Phase 7 progress: 3/4 plans
 
 **By Phase:**
 
@@ -39,7 +39,7 @@ Progress: [███████████████░░░░░] 74% (20
 | 04-gsd-integration | 2 | 16 min | 8 min |
 | 05-optimization-polish | 3 | 28 min | 9.3 min |
 | 06-mcp-server-foundation | 2/2 | 10 min | 5 min |
-| 07-test-coverage | 2/4 | 5 min | 5 min |
+| 07-test-coverage | 3/4 | 11 min | 3.7 min |
 
 ## Accumulated Context
 
@@ -70,6 +70,9 @@ v1.1 decisions (Phase 7):
 - vi.mock() at top for ESM hoisting in tests
 - Mock McpServer pattern to capture handlers for unit testing
 - TOON indent must be multiple of 2 (fixed bug in formatter)
+- Testcontainers for CI-portable container lifecycle (not docker-compose)
+- Build in globalSetup before integration tests
+- Vitest workspace projects for unit/integration separation
 
 ### Content Workflow
 
@@ -87,7 +90,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 07-01-PLAN.md (Test Infrastructure Setup)
+Stopped at: Completed 07-03-PLAN.md (Integration Tests)
 Resume file: None
 
 ## v1.1 MCP Server Milestone
@@ -112,8 +115,8 @@ Resume file: None
 **Phase 7 Progress:**
 - 07-01: Test infrastructure setup (COMPLETE)
 - 07-02: MCP tool unit tests - 48 tests (COMPLETE)
-- 07-03: Integration tests (NOT STARTED)
+- 07-03: Integration tests - 20 tests (COMPLETE)
 - 07-04: E2E tests (NOT STARTED)
 
 ---
-*Last updated: 2026-01-23 — Completed 07-01-PLAN.md (Test Infrastructure Setup)*
+*Last updated: 2026-01-23 — Completed 07-03-PLAN.md (Integration Tests)*
