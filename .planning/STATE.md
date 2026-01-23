@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 
 ## Current Position
 
-Phase: 6 of 8 (MCP Server Foundation) - COMPLETE
-Plan: 2 of 2 complete
-Status: Phase complete
-Last activity: 2026-01-23 — Completed 06-02-PLAN.md (TOON Search Results)
+Phase: 7 of 8 (Test Coverage) - In progress
+Plan: 2 of 4 complete
+Status: In progress
+Last activity: 2026-01-23 — Completed 07-02-PLAN.md (MCP Tool Unit Tests)
 
-Progress: [██████████████░░░░░░] 70% (19/27 total plans across all phases)
+Progress: [███████████████░░░░░] 74% (20/27 total plans across all phases)
 
 ## Performance Metrics
 
@@ -25,8 +25,9 @@ Progress: [██████████████░░░░░░] 70% (19
 - Retrieval latency: ~133ms (target <500ms)
 
 **v1.1 MCP Server (in progress):**
-- Plans completed: 2
+- Plans completed: 4
 - Phase 6 progress: 2/2 plans (COMPLETE)
+- Phase 7 progress: 2/4 plans
 
 **By Phase:**
 
@@ -38,6 +39,7 @@ Progress: [██████████████░░░░░░] 70% (19
 | 04-gsd-integration | 2 | 16 min | 8 min |
 | 05-optimization-polish | 3 | 28 min | 9.3 min |
 | 06-mcp-server-foundation | 2/2 | 10 min | 5 min |
+| 07-test-coverage | 2/4 | 5 min | 5 min |
 
 ## Accumulated Context
 
@@ -61,6 +63,11 @@ v1.1 decisions (Phase 6):
 - zod schemas for tool input validation
 - TOON encoding for search results (30-60% token savings)
 
+v1.1 decisions (Phase 7):
+- vi.mock() at top for ESM hoisting in tests
+- Mock McpServer pattern to capture handlers for unit testing
+- TOON indent must be multiple of 2 (fixed bug in formatter)
+
 ### Content Workflow
 
 Parallel workflow: After each milestone, write article for Medium/LinkedIn/dev.to.
@@ -77,7 +84,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 06-02-PLAN.md (Phase 6 complete)
+Stopped at: Completed 07-02-PLAN.md (MCP Tool Unit Tests)
 Resume file: None
 
 ## v1.1 MCP Server Milestone
@@ -86,7 +93,7 @@ Resume file: None
 
 **Phases:**
 - Phase 6: MCP Server Foundation (11 requirements) — COMPLETE
-- Phase 7: Test Coverage (4 requirements) — Not started
+- Phase 7: Test Coverage (4 requirements) — In progress (2/4 plans)
 - Phase 8: Documentation & Integration (4 requirements) — Not started
 
 **Dependencies:**
@@ -99,5 +106,11 @@ Resume file: None
 - TOON formatter for token-optimized search results
 - Stderr-only logging (stdout reserved for JSON-RPC)
 
+**Phase 7 Progress:**
+- 07-01: Test infrastructure setup (COMPLETE)
+- 07-02: MCP tool unit tests - 48 tests (COMPLETE)
+- 07-03: Integration tests (NOT STARTED)
+- 07-04: E2E tests (NOT STARTED)
+
 ---
-*Last updated: 2026-01-23 — Completed 06-02-PLAN.md (Phase 6 complete)*
+*Last updated: 2026-01-23 — Completed 07-02-PLAN.md (MCP Tool Unit Tests)*
