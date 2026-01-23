@@ -18,6 +18,9 @@
   "scripts": {
     "build:rlm": "node ./node_modules/typescript/bin/tsc -p tsconfig.json",
     "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:all": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:rlm": "node --test dist/rlm/**/*.test.js",
