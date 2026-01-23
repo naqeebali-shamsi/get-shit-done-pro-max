@@ -44,7 +44,7 @@ None (custom system, patterns from research)
 **Milestone Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration with production-quality test coverage.
 
 - [x] **Phase 6: MCP Server Foundation** — Protocol implementation with TOON-formatted tools
-- [ ] **Phase 7: Test Coverage** — 85% coverage with unit, integration, and E2E tests
+- [x] **Phase 7: Test Coverage** — 85% coverage with unit, integration, and E2E tests
 - [ ] **Phase 8: Documentation & Integration** — Setup guides and Claude Desktop configuration
 
 ## Phase Details
@@ -77,10 +77,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Test infrastructure: Vitest coverage config, deterministic mocks, test fixtures
-- [ ] 07-02-PLAN.md — Unit tests for MCP tool handlers (search, index, status) and TOON formatter
-- [ ] 07-03-PLAN.md — Integration tests for JSON-RPC protocol compliance with testcontainers
-- [ ] 07-04-PLAN.md — E2E tests for spawned MCP server and coverage verification
+- [x] 07-01-PLAN.md — Test infrastructure: Vitest coverage config, deterministic mocks, test fixtures
+- [x] 07-02-PLAN.md — Unit tests for MCP tool handlers (search, index, status) and TOON formatter
+- [x] 07-03-PLAN.md — Integration tests for JSON-RPC protocol compliance with testcontainers
+- [x] 07-04-PLAN.md — E2E tests for spawned MCP server and coverage verification
 
 ### Phase 8: Documentation & Integration
 **Goal**: Users can configure Claude Desktop to use RLM MCP server without external help
@@ -91,10 +91,10 @@ Plans:
   2. Each MCP tool has documented usage examples showing input/output
   3. Troubleshooting guide covers common issues: Qdrant unavailable, Ollama missing, collection not found
   4. Users can copy claude_desktop_config.json template and start using RLM tools immediately
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 08-01: TBD
+- [ ] 08-01-PLAN.md — MCP documentation: Claude Desktop setup, tool reference, troubleshooting guide
 
 ## Progress
 
@@ -109,9 +109,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. GSD Integration | v1.0 | 2/2 | Complete | 2026-01-22 |
 | 5. Optimization & Polish | v1.0 | 3/3 | Complete | 2026-01-22 |
 | 6. MCP Server Foundation | v1.1 | 2/2 | Complete | 2026-01-23 |
-| 7. Test Coverage | v1.1 | 0/4 | Not started | - |
-| 8. Documentation & Integration | v1.1 | 0/TBD | Not started | - |
+| 7. Test Coverage | v1.1 | 4/4 | Complete | 2026-01-23 |
+| 8. Documentation & Integration | v1.1 | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-21*
-*Last updated: 2026-01-23 — Phase 7 planned (4 plans)*
+*Last updated: 2026-01-24 — Phase 8 planned (1 plan)*
