@@ -43,7 +43,7 @@ None (custom system, patterns from research)
 
 **Milestone Goal:** Expose RLM capabilities via MCP protocol for Claude Desktop integration with production-quality test coverage.
 
-- [ ] **Phase 6: MCP Server Foundation** — Protocol implementation with TOON-formatted tools
+- [x] **Phase 6: MCP Server Foundation** — Protocol implementation with TOON-formatted tools
 - [ ] **Phase 7: Test Coverage** — 85% coverage with unit, integration, and E2E tests
 - [ ] **Phase 8: Documentation & Integration** — Setup guides and Claude Desktop configuration
 
@@ -62,8 +62,8 @@ None (custom system, patterns from research)
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — MCP server core with stdio transport and three tools (search_code, index_code, get_status)
-- [ ] 06-02-PLAN.md — TOON formatting for search results and end-to-end verification
+- [x] 06-01-PLAN.md — MCP server core with stdio transport and three tools (search_code, index_code, get_status)
+- [x] 06-02-PLAN.md — TOON formatting for search results and end-to-end verification
 
 ### Phase 7: Test Coverage
 **Goal**: RLM codebase has 85% test coverage with comprehensive test suite
@@ -106,10 +106,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 3. Verification Loop | v1.0 | 3/3 | Complete | 2026-01-21 |
 | 4. GSD Integration | v1.0 | 2/2 | Complete | 2026-01-22 |
 | 5. Optimization & Polish | v1.0 | 3/3 | Complete | 2026-01-22 |
-| 6. MCP Server Foundation | v1.1 | 0/2 | Planned | - |
+| 6. MCP Server Foundation | v1.1 | 2/2 | Complete | 2026-01-23 |
 | 7. Test Coverage | v1.1 | 0/TBD | Not started | - |
 | 8. Documentation & Integration | v1.1 | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-01-21*
-*Last updated: 2026-01-22 — Phase 6 plans created*
+*Last updated: 2026-01-23 — Phase 6 complete*

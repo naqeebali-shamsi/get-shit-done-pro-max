@@ -49,6 +49,41 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **QUA-02**: Retrieval precision >0.8
 - [x] **QUA-03**: Documentation for contributors
 
+## v1.1 Requirements
+
+Requirements for MCP Server milestone. Each maps to roadmap phases.
+
+### MCP Server
+
+- [x] **MCP-01**: MCP server with stdio transport (JSON-RPC over stdin/stdout)
+- [x] **MCP-02**: search_code tool wrapping hybridSearch with query and limit params
+- [x] **MCP-03**: index_code tool wrapping indexDirectory with path param
+- [x] **MCP-04**: get_status tool wrapping getCollectionInfo
+- [x] **MCP-05**: JSON schema definitions for all tool inputs/outputs
+- [x] **MCP-06**: Structured error responses with actionable guidance
+- [x] **MCP-07**: Stderr-only logging (stdout reserved for JSON-RPC)
+- [x] **MCP-08**: TOON formatting for search results (token-optimized responses)
+
+### Integration
+
+- [ ] **INT-01**: Claude Desktop configuration template (claude_desktop_config.json)
+- [x] **INT-02**: npm bin entry for rlm-mcp command
+- [x] **INT-03**: Environment variable support (QDRANT_URL, OLLAMA_HOST, RLM_COLLECTION)
+- [x] **INT-04**: @toon-format/toon dependency for token-optimized responses
+
+### Testing
+
+- [ ] **TST-01**: 85% test coverage on RLM modules (carries over from QUA-01)
+- [ ] **TST-02**: Unit tests for MCP tool handlers
+- [ ] **TST-03**: Integration tests for JSON-RPC protocol compliance
+- [ ] **TST-04**: End-to-end test with spawned MCP server
+
+### Documentation
+
+- [ ] **DOC-01**: README with Claude Desktop setup instructions
+- [ ] **DOC-02**: Tool usage examples for each MCP tool
+- [ ] **DOC-03**: Troubleshooting guide for common issues
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -73,6 +108,10 @@ Explicitly excluded. Documented to prevent scope creep.
 | Training/fine-tuning foundation models | Using existing embedding models only |
 | UI/Frontend changes | CLI-only integration |
 | Cloud-managed vector DB | Self-hosted/embedded only for v1 |
+| MCP Resources | Tools sufficient for v1.1, resources add complexity |
+| Progress notifications | Defer based on user feedback |
+| Async indexing | Simple sync approach first |
+| HTTP transport | Claude Desktop uses stdio only |
 
 ## Traceability
 
@@ -99,15 +138,36 @@ Explicitly excluded. Documented to prevent scope creep.
 | OPT-02 | Phase 5 | Complete |
 | OPT-03 | Phase 5 | Complete |
 | OPT-04 | Phase 5 | Complete |
-| QUA-01 | All | Pending |
+| QUA-01 | Phase 7 | Pending |
 | QUA-02 | Phase 5 | Complete |
 | QUA-03 | Phase 5 | Complete |
+| MCP-01 | Phase 6 | Complete |
+| MCP-02 | Phase 6 | Complete |
+| MCP-03 | Phase 6 | Complete |
+| MCP-04 | Phase 6 | Complete |
+| MCP-05 | Phase 6 | Complete |
+| MCP-06 | Phase 6 | Complete |
+| MCP-07 | Phase 6 | Complete |
+| MCP-08 | Phase 6 | Complete |
+| INT-01 | Phase 8 | Pending |
+| INT-02 | Phase 6 | Complete |
+| INT-03 | Phase 6 | Complete |
+| INT-04 | Phase 6 | Complete |
+| TST-01 | Phase 7 | Pending |
+| TST-02 | Phase 7 | Pending |
+| TST-03 | Phase 7 | Pending |
+| TST-04 | Phase 7 | Pending |
+| DOC-01 | Phase 8 | Pending |
+| DOC-02 | Phase 8 | Pending |
+| DOC-03 | Phase 8 | Pending |
 
 **Coverage:**
-- v1 requirements: 24 total
-- Mapped to phases: 24
-- Unmapped: 0
+- v1 requirements: 24 total (23 complete, 1 pending in v1.1)
+- v1.1 requirements: 19 total
+- Total requirements tracked: 43
+- Mapped to phases: 43
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-21*
-*Last updated: 2026-01-22 — Phase 5 requirements complete, v1.0 MVP complete*
+*Last updated: 2026-01-23 — Phase 6 requirements complete (MCP-01 through MCP-08, INT-02, INT-03, INT-04)*
