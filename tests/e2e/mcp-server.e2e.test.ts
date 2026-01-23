@@ -28,6 +28,7 @@ import {
 describe('MCP Server E2E', () => {
   let server: ChildProcess;
   let tempDir: string;
+  let indexingComplete = false;
   const testCollectionName = `rlm_e2e_${Date.now()}`;
 
   beforeAll(async () => {
@@ -150,7 +151,22 @@ export function generateId(): string {
 
     // Wait for server to be ready
     await waitForServer(server, 15000, 'Starting RLM MCP server');
-  }, 60000); // 60s timeout for setup
+
+    // Pre-index the test directory once for all tests
+    // This is done in beforeAll to avoid timeout issues in individual tests
+    // Note: Indexing requires Ollama - tests will still pass but with mock/empty embeddings
+    // if Ollama is not available (graceful degradation)
+    const indexResponse = await sendJSONRPCRequest(
+      server,
+      'tools/call',
+      {
+        name: 'index_code',
+        arguments: { path: tempDir },
+      },
+      120000 // 2 min timeout for indexing (may need Ollama)
+    );
+    indexingComplete = indexResponse?.result !== undefined;
+  }, 180000); // 3 min timeout for setup including indexing
 
   afterAll(async () => {
     // Cleanup server
@@ -206,6 +222,10 @@ export function generateId(): string {
 
   describe('index_code tool', () => {
     it('indexes a directory and reports results', async () => {
+      // Indexing was done in beforeAll - verify it completed
+      expect(indexingComplete).toBe(true);
+
+      // Re-index to verify the response format (uses cached embeddings, fast)
       const response = await sendJSONRPCRequest(
         server,
         'tools/call',
@@ -213,7 +233,7 @@ export function generateId(): string {
           name: 'index_code',
           arguments: { path: tempDir },
         },
-        60000 // 60s timeout for indexing
+        30000 // 30s timeout (re-indexing is faster with cache)
       );
 
       expect(response).toHaveProperty('result');
@@ -224,7 +244,7 @@ export function generateId(): string {
 
       const text = extractTextContent(result!);
       expect(text).toContain('Indexing complete');
-    }, 90000);
+    }, 60000);
 
     it('reports number of files indexed', async () => {
       const response = await sendJSONRPCRequest(
@@ -234,7 +254,7 @@ export function generateId(): string {
           name: 'index_code',
           arguments: { path: tempDir },
         },
-        60000
+        30000
       );
 
       const result = parseToolResult(response);
@@ -242,7 +262,7 @@ export function generateId(): string {
 
       // Should mention files indexed
       expect(text).toMatch(/files?\s*(indexed|processed)/i);
-    }, 90000);
+    }, 60000);
 
     it('handles non-existent directory gracefully', async () => {
       const response = await sendJSONRPCRequest(
@@ -271,18 +291,7 @@ export function generateId(): string {
   // ==========================================
 
   describe('search_code tool', () => {
-    beforeAll(async () => {
-      // Ensure directory is indexed before search tests
-      await sendJSONRPCRequest(
-        server,
-        'tools/call',
-        {
-          name: 'index_code',
-          arguments: { path: tempDir },
-        },
-        60000
-      );
-    }, 90000);
+    // Note: Indexing is done in the top-level beforeAll, so no need to re-index here
 
     it('returns TOON-formatted results', async () => {
       const response = await sendJSONRPCRequest(
@@ -386,20 +395,8 @@ export function generateId(): string {
 
   describe('full workflow', () => {
     it('completes index -> search -> verify cycle', async () => {
-      // Step 1: Index the temp directory
-      const indexResponse = await sendJSONRPCRequest(
-        server,
-        'tools/call',
-        {
-          name: 'index_code',
-          arguments: { path: tempDir },
-        },
-        60000
-      );
-
-      expect(indexResponse).toHaveProperty('result');
-      const indexResult = parseToolResult(indexResponse);
-      expect(extractTextContent(indexResult!)).toContain('Indexing complete');
+      // Step 1: Verify indexing completed in beforeAll
+      expect(indexingComplete).toBe(true);
 
       // Step 2: Search for arithmetic operations (more semantic query)
       const searchResponse = await sendJSONRPCRequest(
