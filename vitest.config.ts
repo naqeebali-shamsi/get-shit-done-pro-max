@@ -2,12 +2,32 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    // Standard test configuration
-    include: ['**/*.test.ts'],
-    exclude: ['node_modules', 'dist'],
-    environment: 'node',
+    // Workspace projects for different test types
+    projects: [
+      {
+        // Unit tests - fast, no containers
+        test: {
+          name: 'unit',
+          include: ['tests/unit/**/*.test.ts'],
+          exclude: ['node_modules', 'dist'],
+          environment: 'node',
+        },
+      },
+      {
+        // Integration tests - with containers
+        test: {
+          name: 'integration',
+          include: ['tests/integration/**/*.test.ts'],
+          exclude: ['node_modules', 'dist'],
+          environment: 'node',
+          globalSetup: './tests/setup/global-setup.ts',
+          testTimeout: 60000,
+          hookTimeout: 120000, // Container startup can be slow
+        },
+      },
+    ],
 
-    // Coverage configuration
+    // Coverage configuration (applies to all projects)
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
