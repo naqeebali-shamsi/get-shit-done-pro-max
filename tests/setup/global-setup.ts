@@ -34,7 +34,9 @@ export async function setup(): Promise<void> {
   container = await new QdrantContainer('qdrant/qdrant:v1.13.1').start();
 
   // Make URL available to tests via environment variable
-  const qdrantUrl = container.getRestHostAddress();
+  // getRestHostAddress returns host:port, we need to add http:// protocol
+  const hostAddress = container.getRestHostAddress();
+  const qdrantUrl = hostAddress.startsWith('http') ? hostAddress : `http://${hostAddress}`;
   process.env.QDRANT_URL = qdrantUrl;
 
   console.log(`[global-setup] Qdrant started at ${qdrantUrl}`);

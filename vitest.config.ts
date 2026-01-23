@@ -17,7 +17,7 @@ export default defineConfig({
         // Integration tests - with containers
         test: {
           name: 'integration',
-          include: ['tests/integration/**/*.test.ts'],
+          include: ['tests/integration/**/*.test.ts', 'tests/e2e/**/*.test.ts'],
           exclude: ['node_modules', 'dist'],
           environment: 'node',
           globalSetup: './tests/setup/global-setup.ts',
