@@ -459,6 +459,163 @@ This ensures absolute paths are used instead of `~` which may not expand correct
 
 ---
 
+## MCP Server for Claude Desktop
+
+GSD includes an MCP server that exposes RLM (Retrieval-augmented Language Models) codebase intelligence to Claude Desktop. This allows Claude to search and understand your codebase using semantic search powered by local vector embeddings.
+
+### Prerequisites
+
+Before configuring Claude Desktop, ensure these services are running:
+
+1. **Docker (for Qdrant vector database)**
+   ```bash
+   docker run -d -p 6333:6333 qdrant/qdrant
+   ```
+
+2. **Ollama with embedding model**
+   ```bash
+   ollama pull nomic-embed-text
+   ```
+
+### Claude Desktop Configuration
+
+The configuration file location varies by platform:
+
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+- **Linux:** `~/.config/Claude/claude_desktop_config.json`
+
+### Minimal Configuration (macOS/Linux)
+
+Add this to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "rlm": {
+      "command": "npx",
+      "args": ["-y", "get-shit-done-cc", "rlm-mcp"]
+    }
+  }
+}
+```
+
+### Windows Configuration
+
+Windows requires a command wrapper:
+
+```json
+{
+  "mcpServers": {
+    "rlm": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "get-shit-done-cc", "rlm-mcp"]
+    }
+  }
+}
+```
+
+### Available Tools
+
+| Tool | Description | Input | Output |
+|------|-------------|-------|--------|
+| `search_code` | Search indexed codebase | `query` (string), `limit` (number, default 5) | Code chunks with file paths and line numbers |
+| `index_code` | Index a directory for searching | `path` (string) | Summary: files indexed, skipped, errors |
+| `get_status` | Check system status | none | Qdrant status, collection info, chunk count |
+
+### Usage Examples
+
+**search_code:**
+```
+Input: {"query": "authentication middleware", "limit": 3}
+Output: 3 chunks from src/auth/middleware.ts (lines 12-45, 67-89, 102-134)
+        showing JWT validation, session handling, and role checks
+```
+
+**index_code:**
+```
+Input: {"path": "/Users/dev/my-project/src"}
+Output: Indexed 47 files (42 TypeScript, 5 JSON), skipped 12 (node_modules, .git)
+        Collection: rlm_chunks, Total chunks: 156
+```
+
+**get_status:**
+```
+Input: (none)
+Output: Qdrant: connected (http://localhost:6333)
+        Ollama: configured (http://localhost:11434)
+        Collection: rlm_chunks (156 chunks indexed)
+```
+
+### Quick Start
+
+1. Start Qdrant: `docker run -d -p 6333:6333 qdrant/qdrant`
+2. Start Ollama: `ollama serve` (if not already running)
+3. Add configuration to `claude_desktop_config.json`
+4. Restart Claude Desktop
+5. Use `get_status` to verify connection
+6. Use `index_code` to index your project
+7. Use `search_code` to query your codebase
+
+### Environment Variables
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `QDRANT_URL` | `http://localhost:6333` | Qdrant server endpoint |
+| `OLLAMA_HOST` | `http://localhost:11434` | Ollama server endpoint |
+| `RLM_COLLECTION` | `rlm_chunks` | Qdrant collection name |
+
+**Example configuration with custom environment variables:**
+
+```json
+{
+  "mcpServers": {
+    "rlm": {
+      "command": "npx",
+      "args": ["-y", "get-shit-done-cc", "rlm-mcp"],
+      "env": {
+        "QDRANT_URL": "http://localhost:6333",
+        "OLLAMA_HOST": "http://localhost:11434"
+      }
+    }
+  }
+}
+```
+
+### Troubleshooting
+
+**Qdrant unavailable**
+```
+Check: curl http://localhost:6333/collections
+  Returns JSON? → Qdrant is running
+  Connection refused? → Start Qdrant: docker run -d -p 6333:6333 qdrant/qdrant
+```
+
+**Ollama missing**
+```
+Check: curl http://localhost:11434/api/tags
+  Returns JSON? → Ollama is running, check embedding model
+  Connection refused? → Start Ollama: ollama serve
+
+Check: ollama list | grep nomic-embed-text
+  Found? → Model ready
+  Not found? → Pull model: ollama pull nomic-embed-text
+```
+
+**Collection not found / 0 results**
+```
+Check: Use get_status tool in Claude Desktop
+  Shows "0 chunks indexed"? → Index codebase: use index_code tool with path
+```
+
+### Viewing Logs
+
+- **macOS:** `~/Library/Logs/Claude/mcp*.log`
+- **Windows:** `%APPDATA%\Claude\logs\mcp*.log`
+- **Or:** Claude Desktop → Settings → Developer → (select rlm) → Open Logs
+
+---
+
 ## Star History
 
 <a href="https://star-history.com/#glittercowboy/get-shit-done&Date">
