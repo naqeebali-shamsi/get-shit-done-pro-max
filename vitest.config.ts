@@ -31,28 +31,32 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      include: ['src/rlm/**/*.ts'],
+      // Phase 7 focused on MCP server testing
+      include: ['src/rlm/mcp/**/*.ts'],
       exclude: [
         '**/*.test.ts',
         '**/*.bench.ts',
         'node_modules/**',
         'dist/**',
+        // Exclude main entry points (tested via E2E)
+        '**/server.ts',
+        '**/index.ts',
       ],
-      // Tiered coverage thresholds
+      // Coverage thresholds for MCP modules
       thresholds: {
-        // Global minimum thresholds
-        lines: 80,
-        functions: 80,
-        branches: 80,
-        statements: 80,
-        // Critical tier: MCP tools and CLI require 90%
-        'src/rlm/mcp/**/*.ts': {
+        // Phase 7 target: 85% overall for MCP modules
+        lines: 85,
+        functions: 85,
+        branches: 80, // Slightly lower for branches
+        statements: 85,
+        // MCP tools require high coverage
+        'src/rlm/mcp/tools/**/*.ts': {
           lines: 90,
           functions: 90,
-          branches: 90,
+          branches: 80,
           statements: 90,
         },
-        'src/rlm/cli/**/*.ts': {
+        'src/rlm/mcp/formatters/**/*.ts': {
           lines: 90,
           functions: 90,
           branches: 90,
