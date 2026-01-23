@@ -64,6 +64,9 @@ v1.1 decisions (Phase 6):
 - TOON encoding for search results (30-60% token savings)
 
 v1.1 decisions (Phase 7):
+- SHA-256 hash-based vector generation for deterministic embedding mocks
+- 80% global / 90% MCP+CLI tiered coverage thresholds
+- In-memory Qdrant mock with real cosine similarity scoring
 - vi.mock() at top for ESM hoisting in tests
 - Mock McpServer pattern to capture handlers for unit testing
 - TOON indent must be multiple of 2 (fixed bug in formatter)
@@ -84,7 +87,7 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-23
-Stopped at: Completed 07-02-PLAN.md (MCP Tool Unit Tests)
+Stopped at: Completed 07-01-PLAN.md (Test Infrastructure Setup)
 Resume file: None
 
 ## v1.1 MCP Server Milestone
@@ -113,4 +116,4 @@ Resume file: None
 - 07-04: E2E tests (NOT STARTED)
 
 ---
-*Last updated: 2026-01-23 — Completed 07-02-PLAN.md (MCP Tool Unit Tests)*
+*Last updated: 2026-01-23 — Completed 07-01-PLAN.md (Test Infrastructure Setup)*
