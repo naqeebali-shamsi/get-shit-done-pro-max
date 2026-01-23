@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Existing /gsd commands become dramatically smarter at understanding large codebases without users changing how they work.
-**Current focus:** v1.1 MCP Server — Phase 7 (Test Coverage)
+**Current focus:** v1.1 MCP Server — Phase 8 (Documentation & Integration)
 
 ## Current Position
 
-Phase: 7 of 8 (Test Coverage) - In progress
-Plan: 3 of 4 complete
-Status: In progress
-Last activity: 2026-01-23 — Completed 07-03-PLAN.md (Integration Tests)
+Phase: 8 of 8 (Documentation & Integration) - COMPLETE
+Plan: 1 of 1 complete
+Status: Phase complete
+Last activity: 2026-01-24 — Completed 08-01-PLAN.md (MCP Server Documentation)
 
-Progress: [████████████████░░░░] 78% (21/27 total plans across all phases)
+Progress: [████████████████████] 100% (24/24 total plans across all phases)
 
 ## Performance Metrics
 
@@ -24,10 +24,11 @@ Progress: [████████████████░░░░] 78% (21
 - Total execution time: ~1.9 hours
 - Retrieval latency: ~133ms (target <500ms)
 
-**v1.1 MCP Server (in progress):**
-- Plans completed: 5
+**v1.1 MCP Server (complete):**
+- Plans completed: 7
 - Phase 6 progress: 2/2 plans (COMPLETE)
-- Phase 7 progress: 3/4 plans
+- Phase 7 progress: 4/4 plans (COMPLETE)
+- Phase 8 progress: 1/1 plan (COMPLETE)
 
 **By Phase:**
 
@@ -39,7 +40,8 @@ Progress: [████████████████░░░░] 78% (21
 | 04-gsd-integration | 2 | 16 min | 8 min |
 | 05-optimization-polish | 3 | 28 min | 9.3 min |
 | 06-mcp-server-foundation | 2/2 | 10 min | 5 min |
-| 07-test-coverage | 3/4 | 11 min | 3.7 min |
+| 07-test-coverage | 4/4 | 25 min | 6.3 min |
+| 08-documentation-integration | 1/1 | 2 min | 2 min |
 
 ## Accumulated Context
 
@@ -74,6 +76,12 @@ v1.1 decisions (Phase 7):
 - Build in globalSetup before integration tests
 - Vitest workspace projects for unit/integration separation
 
+v1.1 decisions (Phase 8):
+- All MCP documentation in README (single file, no separate docs/ folder)
+- Tool documentation uses compact table format for quick reference
+- Troubleshooting covers only core three scenarios with minimal verbosity
+- Platform-specific configurations shown for Windows/macOS/Linux
+
 ### Content Workflow
 
 Parallel workflow: After each milestone, write article for Medium/LinkedIn/dev.to.
@@ -89,8 +97,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-23
-Stopped at: Completed 07-03-PLAN.md (Integration Tests)
+Last session: 2026-01-24
+Stopped at: Completed Phase 8 (Documentation & Integration)
 Resume file: None
 
 ## v1.1 MCP Server Milestone
@@ -99,12 +107,14 @@ Resume file: None
 
 **Phases:**
 - Phase 6: MCP Server Foundation (11 requirements) — COMPLETE
-- Phase 7: Test Coverage (4 requirements) — In progress (2/4 plans)
-- Phase 8: Documentation & Integration (4 requirements) — Not started
+- Phase 7: Test Coverage (4 requirements) — COMPLETE
+- Phase 8: Documentation & Integration (4 requirements) — COMPLETE
 
 **Dependencies:**
 - @modelcontextprotocol/sdk@^1.25.3 (installed)
 - @toon-format/toon@^2.1.0 (installed)
+- @vitest/coverage-v8 (installed)
+- @testcontainers/qdrant (installed)
 
 **Phase 6 Deliverables:**
 - MCP server with stdio transport (server.ts)
@@ -112,11 +122,21 @@ Resume file: None
 - TOON formatter for token-optimized search results
 - Stderr-only logging (stdout reserved for JSON-RPC)
 
-**Phase 7 Progress:**
-- 07-01: Test infrastructure setup (COMPLETE)
-- 07-02: MCP tool unit tests - 48 tests (COMPLETE)
-- 07-03: Integration tests - 20 tests (COMPLETE)
-- 07-04: E2E tests (NOT STARTED)
+**Phase 7 Deliverables:**
+- 82 tests total (48 unit + 20 integration + 14 E2E)
+- 100% statement coverage, 95% branch coverage
+- Deterministic mocks for Ollama and Qdrant
+- Testcontainers-based integration test infrastructure
+- Vitest workspace projects for test separation
+
+**Phase 8 Deliverables:**
+- Comprehensive MCP server documentation in README
+- Claude Desktop setup instructions for all platforms (macOS, Windows, Linux)
+- Tool reference with usage examples (search_code, index_code, get_status)
+- Troubleshooting guide for common issues (Qdrant, Ollama, collection)
+- Copy-paste configuration templates for immediate use
+
+**v1.1 MCP Server milestone COMPLETE:** All 24 plans across 8 phases delivered.
 
 ---
-*Last updated: 2026-01-23 — Completed 07-03-PLAN.md (Integration Tests)*
+*Last updated: 2026-01-24 — Completed Phase 8 (Documentation & Integration) - v1.1 MCP Server milestone complete*
